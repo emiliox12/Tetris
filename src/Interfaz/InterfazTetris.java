@@ -54,7 +54,7 @@ public class InterfazTetris extends JFrame {
 	/**
 	 * panel del tablero
 	 */
-	Lienzo lienzo;
+	private Lienzo lienzo;
 	
 	/**
 	 * Listener Botones
