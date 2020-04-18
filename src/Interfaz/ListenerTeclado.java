@@ -5,9 +5,14 @@ import java.awt.event.KeyListener;
 
 public class ListenerTeclado implements KeyListener {
 
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		int key = arg0.getKeyCode();
+		if (key == KeyEvent.VK_KP_LEFT)
+		{
+			System.out.println("Hola");
+		}
 
 	}
 

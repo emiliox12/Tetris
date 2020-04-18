@@ -21,6 +21,9 @@ public class InterfazTetris extends JFrame {
 	public final static int PINK = 6;
 	public final static int ORANGE = 7;
 	
+	public final static int cuadX = 20;
+	public final static int cuadY = 10;
+	
 
 	/**
 	 * Mundo
@@ -33,22 +36,32 @@ public class InterfazTetris extends JFrame {
 	private PanelMejoresPuntajes pMejoresPuntajes;
 	
 	/**
-	 * 
+	 * Panel de imagen
 	 */
 	private PanelImagen panelImagen;
 	
+	/**
+	 * panel del tablero
+	 */
+	Lienzo lienzo;
 	
 	public InterfazTetris()
 	{
-		
-        setSize( 700, 800 );
+		setLayout( new BorderLayout( ) );
         setTitle( "Tetris" );
+        setSize( 700, 800 );
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setLocationRelativeTo( null );
         
         // Creación de los paneles.
         panelImagen = new PanelImagen( );
         add( panelImagen, BorderLayout.NORTH );
+        
+        
+        lienzo = new Lienzo(cuadX, cuadY );
+        add( lienzo, BorderLayout.CENTER );
+        
+
 	}
 	
 	public void jugar()
