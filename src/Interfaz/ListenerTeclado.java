@@ -3,15 +3,38 @@ package Interfaz;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class ListenerTeclado implements KeyListener {
+import javax.swing.JPanel;
 
+public class ListenerTeclado extends JPanel implements KeyListener {
+
+	private InterfazTetris principal;
 	
+	public ListenerTeclado(InterfazTetris pPrincipal) {
+		pPrincipal = principal;
+		this.addKeyListener(this);
+        setFocusable(true);
+        requestFocusInWindow();
+	}
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		int key = arg0.getKeyCode();
-		if (key == KeyEvent.VK_KP_LEFT)
+	public void keyPressed(KeyEvent e) {
+		
+		int key = e.getKeyCode();
+		
+		if (key == KeyEvent.VK_LEFT)
 		{
-			System.out.println("Hola");
+			principal.moverIzquierda();
+		}
+		else if (key == KeyEvent.VK_RIGHT)
+		{
+			principal.moverDerecha();
+		}
+		else if (key == KeyEvent.VK_DOWN)
+		{
+			principal.bajarTeclado();
+		}
+		else if (key == KeyEvent.VK_UP)
+		{
+			principal.rotate();
 		}
 
 	}

@@ -3,12 +3,18 @@ package Interfaz;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import Mundo.*;
 
 public class InterfazTetris extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Vlores de las casillas;
 	 */
@@ -41,9 +47,28 @@ public class InterfazTetris extends JFrame {
 	private PanelImagen panelImagen;
 	
 	/**
+	 * Panel de imagen
+	 */
+	private PanelBotones panelBotones;
+	
+	/**
 	 * panel del tablero
 	 */
 	Lienzo lienzo;
+	
+	/**
+	 * Listener Botones
+	 */
+	private ListenerTeclado listenerTeclado;
+	
+	/**
+	 * Listener reloj
+	 */
+	private Clock clock;
+	
+	//=================================================
+	//Métodods
+	//=================================================
 	
 	public InterfazTetris()
 	{
@@ -57,8 +82,22 @@ public class InterfazTetris extends JFrame {
         panelImagen = new PanelImagen( );
         add( panelImagen, BorderLayout.NORTH );
         
+        panelBotones = new PanelBotones( this);
+        add( panelBotones, BorderLayout.SOUTH);
         
-        lienzo = new Lienzo(cuadX, cuadY );
+        JPanel invisible = new JPanel();
+        invisible.setLayout(new BorderLayout());
+        add(invisible, BorderLayout.WEST);
+      
+        listenerTeclado = new ListenerTeclado( this);
+        invisible.add( listenerTeclado, BorderLayout.NORTH);
+        clock = new Clock( this);
+        invisible.add( clock, BorderLayout.NORTH);
+        
+        
+        
+        
+        lienzo = new Lienzo(cuadX, cuadY, this );
         add( lienzo, BorderLayout.CENTER );
         
 
@@ -67,6 +106,24 @@ public class InterfazTetris extends JFrame {
 	public void jugar()
 	{
 		tablero = new Tablero();
+	}
+	
+	public void bajar() {
+		
+	}
+	
+	public void moverDerecha(){
+		
+	}
+	
+	public void moverIzquierda() {
+		
+	}
+	public void rotate() {
+		
+	}
+	public void bajarTeclado() {
+		clock.darTimer().restart();
 	}
 	
 	
@@ -88,4 +145,6 @@ public class InterfazTetris extends JFrame {
         InterfazTetris interfaz = new InterfazTetris( );
         interfaz.setVisible( true );
     }
+    
+ 
 }
