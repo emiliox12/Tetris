@@ -11,8 +11,8 @@ public class Parte implements IParte{
 	protected int YCentro;
 	protected int XCentro;
 	
-	protected int[] x;
-	protected int[] y;
+	protected int[] coordX;
+	protected int[] coordY;
 	
 	
 	protected int color;
@@ -24,19 +24,19 @@ public class Parte implements IParte{
 	 * @param pX posición en donde se crean;
 	 * @param pY
 	 */
-	public Parte(int pX,int pY){
-		XCentro = pX;
+	public Parte(int pY,int pX){
 		YCentro = pY;
+		XCentro = pX;
 	}
 	
 	@Override
 	public int[] darX() {
-		return x;
+		return coordX;
 	}
 
 	@Override
 	public int[] darY() {
-		return y;
+		return coordY;
 	}
 	
 	@Override
@@ -55,14 +55,15 @@ public class Parte implements IParte{
 
 	@Override
 	public void rotar() {
-		System.out.println("Rotando");
 		for (int i = 0; i < 4; i++) {
-			int nX = -x[i]; 
-			int nY	= y[i];
-			y[i] = nX;
-			x[i] = nY;
+			int nX = -coordX[i]; 
+			int nY	= coordY[i];
+			coordY[i] = nX;
+			coordX[i] = nY;
 		}
 	}
+	
+	
 
 	@Override
 	public int[][] moverIzquiqerda() {
@@ -78,7 +79,23 @@ public class Parte implements IParte{
 
 	@Override
 	public void bajar() {
-		XCentro++;
+		YCentro++;
+	}
+	
+	public String toString() {
+		return ("X-" + XCentro + " Y-" + YCentro);
+	}
+
+	@Override
+	public int[] darNuevosX(int pX, int pY) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] darVuevosY(int pX, int pY) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

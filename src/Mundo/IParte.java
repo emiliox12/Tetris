@@ -10,6 +10,8 @@ public interface IParte {
 	public int darCentroY();
 	public int[] darX();
 	public int[] darY();
+	public int[] darNuevosX(int pX, int pY);
+	public int[] darVuevosY(int pX, int pY);
 	public int darColor();
 	
 }

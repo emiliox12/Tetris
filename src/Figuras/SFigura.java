@@ -13,26 +13,8 @@ public class SFigura extends Parte {
 	public SFigura(int pX, int pY) {
 		super(pX, pY);
 		color = 5;
+		coordX = x;
+		coordY = y;
 	}
 	
-	
-	@Override
-	public int[] darX() {
-		return x;
-	}
-
-	@Override
-	public int[] darY() {
-		return y;
-	}
-	@Override
-	public void rotar() {
-		System.out.println("Rotando");
-		for (int i = 0; i < 4; i++) {
-			int nX = -x[i]; 
-			int nY	= y[i];
-			y[i] = nX;
-			x[i] = nY;
-		}
-	}
 }

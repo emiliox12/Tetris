@@ -94,12 +94,13 @@ public class Tablero {
 	 */
 	public int[][] imprimirTablero(){
 		int[][] cuadrilla = new int[ancho][alto];
+		System.out.println(piezaActual);
 		copiarTablero(cuadrilla);
 		for (int i = 0; i < 4; i++)
 		{
-			int x = piezaActual.darCentroX() + piezaActual.darX()[i];
 			int y = piezaActual.darCentroY() + piezaActual.darY()[i];
-			cuadrilla[x][y] = piezaActual.darColor();
+			int x = piezaActual.darCentroX() + piezaActual.darX()[i];
+			cuadrilla[y][x] = piezaActual.darColor();
 		}
 		return cuadrilla;
 	}
@@ -126,6 +127,7 @@ public class Tablero {
 	}
 	
 	public void bajar() {
+		
 		piezaActual.bajar();
 	}
 	

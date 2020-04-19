@@ -27,8 +27,8 @@ public class InterfazTetris extends JFrame {
 	public final static int PINK = 6;
 	public final static int ORANGE = 7;
 	
-	public final static int cuadX = 20;
 	public final static int cuadY = 10;
+	public final static int cuadX = 20;
 	
 
 	/**
@@ -123,6 +123,7 @@ public class InterfazTetris extends JFrame {
 	}
 	public void rotate() {
 		tablero.rotar();
+		pintarCuadrilla();
 	}
 	public void bajarTeclado() {
 		tablero.bajar();
