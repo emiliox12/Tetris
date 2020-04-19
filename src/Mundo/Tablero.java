@@ -54,7 +54,6 @@ public class Tablero {
 	private IParte crearParte(int x, int y) {
 		Random rand = new Random();
 		int rnd = (rand.nextInt(7) +1);
-		System.out.println(rnd);
 		IParte nuevaParte = null;
 		switch (rnd) {
 		case 1:
@@ -79,7 +78,6 @@ public class Tablero {
 			nuevaParte = (IParte) new ZFigura(x, y);
 			break;
 		}
-		System.out.println(nuevaParte);
 		return nuevaParte;
 		
 	}
@@ -104,7 +102,6 @@ public class Tablero {
 	 */
 	public int[][] imprimirTablero(){
 		int[][] cuadrilla = new int[ancho][alto];
-		System.out.println(piezaActual);
 		copiarTablero(cuadrilla);
 		for (int i = 0; i < 4; i++)
 		{
