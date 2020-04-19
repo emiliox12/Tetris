@@ -1,13 +1,15 @@
 package Mundo;
 
-import Mundo.Parte.Forma;
-
 public interface IParte {
-	
-	public Parte Rotar();
 
-	public void definirFormaRandom();
-
-	public void definirForma(Forma pForma);
+	public int[][] rotar();
+	public int[][] moverIzquiqerda();
+	public int[][] moverDerecha();
+	public void bajar();
+	public int darCentroX();
+	public int darCentroY();
+	public int[] darX();
+	public int[] darY();
+	public int darColor();
 	
 }

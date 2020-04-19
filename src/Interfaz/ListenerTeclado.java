@@ -10,7 +10,7 @@ public class ListenerTeclado extends JPanel implements KeyListener {
 	private InterfazTetris principal;
 	
 	public ListenerTeclado(InterfazTetris pPrincipal) {
-		pPrincipal = principal;
+		principal = pPrincipal;
 		this.addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
@@ -36,6 +36,11 @@ public class ListenerTeclado extends JPanel implements KeyListener {
 		{
 			principal.rotate();
 		}
+		else if (key == KeyEvent.VK_SPACE)
+		{
+			principal.pintarCuadrilla();
+		}
+
 
 	}
 

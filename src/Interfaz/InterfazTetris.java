@@ -105,11 +105,13 @@ public class InterfazTetris extends JFrame {
 	
 	public void jugar()
 	{
-		tablero = new Tablero();
+		tablero = new Tablero(cuadX, cuadY);
+		clock.timer.start();
 	}
 	
 	public void bajar() {
-		
+		tablero.bajar();
+		pintarCuadrilla();
 	}
 	
 	public void moverDerecha(){
@@ -124,6 +126,22 @@ public class InterfazTetris extends JFrame {
 	}
 	public void bajarTeclado() {
 		clock.darTimer().restart();
+	}
+	
+	public void pintarCuadrilla(){
+		int [][] cuadrlla = tablero.imprimirTablero();
+		for (int i = 0; i < cuadX; i++) {
+			for (int j = 0; j < cuadY; j++) {
+				if (cuadrlla[i][j] == 0)
+				{
+					System.out.print("-");
+				}
+				else {
+				    System.out.print("" + cuadrlla[i][j]);
+				}
+			}
+			System.out.println();
+		}
 	}
 	
 	

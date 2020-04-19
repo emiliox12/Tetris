@@ -11,11 +11,11 @@ import javax.swing.JPanel;
 
 public class PanelBotones extends JPanel implements ActionListener{
 
-	public final static String BOTON1 = "boton1";
+	public final static String PLAY = "play";
 	public final static String BOTON2 = "boton2";
 	public final static String BOTON3 = "boton3";
 	
-	private JButton boton1;
+	private JButton bPlay;
 	private JButton boton2;
 	private JButton boton3;
 	
@@ -26,10 +26,10 @@ public class PanelBotones extends JPanel implements ActionListener{
 		principal = pInterfaz;
         setLayout(new GridLayout(1,3)); 
 	
-        boton1 = new JButton( "Boton1" );
-        boton1.setActionCommand( BOTON1 );
-        boton1.addActionListener( this );
-        add( boton1 );
+        bPlay = new JButton( "Play" );
+        bPlay.setActionCommand( PLAY );
+        bPlay.addActionListener( this );
+        add( bPlay );
 
         boton2 = new JButton( "Boton2" );
         boton2.setActionCommand( BOTON2 );
@@ -45,7 +45,15 @@ public class PanelBotones extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("cosas");
+		String command = e.getActionCommand();
+		if (command == PLAY)
+		{
+			principal.jugar();
+		}
+		else if (command == BOTON2)
+		{
+			principal.pintarCuadrilla();
+		}
 		
 	}
 	

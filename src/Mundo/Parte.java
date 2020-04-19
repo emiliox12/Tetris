@@ -4,46 +4,80 @@ import java.awt.Color;
 import java.util.Random;
 
 
-public class Parte {
+public class Parte implements IParte{
 	//**************
   // Atributos
   //**************
-
-	private Forma formaPieza;
-	private int[][] coords;
+	protected int YCentro;
+	protected int XCentro;
 	
-	public enum Forma {
-		  NoForma(new int[][] { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }, new Color(0, 0, 0)),
-		  ZForma(new int[][] { { 0, -1 }, { 0, 0 }, { -1, 0 }, { -1, 1 } }, new Color(204, 102, 102)),
-		  SForma(new int[][] { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } }, new Color(102, 204, 102)),
-		  LineForma(new int[][] { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 2 } }, new Color(102, 102, 204)),
-		  TForma(new int[][] { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 0, 1 } }, new Color(204, 204, 102)),
-		  CuadradoForma(new int[][] { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } }, new Color(204, 102, 204)),
-		  LForma(new int[][] { { -1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } }, new Color(102, 204, 204)),
-		  EspejoL(new int[][] { { 1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } }, new Color(218, 170, 0));
-		 
-		public int[][] coords;
-		public Color color;
-		 
-		private Forma(int[][] coords, Color c) {
-		    this.coords = coords;
-		    color = c;
-		  }
+	protected int[] x;
+	protected int[] y;
+	
+	
+	protected int color;
+	
+	
+	
+	/**
+	 * Crea una parte en esa posicion
+	 * @param pX posición en donde se crean;
+	 * @param pY
+	 */
+	public Parte(int pX,int pY){
+		XCentro = pX;
+		YCentro = pY;
 	}
 	
-		
+	@Override
+	public int[] darX() {
+		return x;
+	}
+
+	@Override
+	public int[] darY() {
+		return y;
+	}
+	
+	@Override
+	public int darColor() {
+		return color;
+	}
+	
+	
+	public int darCentroX(){
+		return XCentro;
+	}
+
+	public int darCentroY(){
+		return YCentro;
+	}
+
+	@Override
+	public int[][] rotar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[][] moverIzquiqerda() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[][] moverDerecha() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void bajar() {
+		XCentro++;
+	}
+
 	
 	/*
-	 * Contructor
-	 */
-	
-	public Parte(){
-		
-		coords = new int[4][2];
-		definirForma(Forma.NoForma);
-		
-	}
-	
 	//*****************
 	// Metodos
 	//*****************
@@ -76,7 +110,7 @@ public class Parte {
 	 * Definir Pieza Aleatoria
 	 * El metodo toma los valores de la enumeracion de formas
 	 * y extrae cualquiera de las formas para generar una pieza aleatoria
-	 */
+	 
 	public void definirFormaRandom() {
 		Random r = new Random();
 	    int x = Math.abs(r.nextInt()) % 7 + 1;
@@ -86,6 +120,10 @@ public class Parte {
 	
 	public Forma darForma() {
 		return formaPieza;
+	}
+	
+	public int[][] darCoords(){
+		return coords;
 	}
 	
 	
@@ -104,5 +142,6 @@ public class Parte {
 	      }
 	      return resultado;
 	}
+	*/
 }
 
