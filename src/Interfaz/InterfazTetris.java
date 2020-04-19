@@ -1,6 +1,7 @@
 package Interfaz;
 
 import java.awt.BorderLayout;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -66,6 +67,10 @@ public class InterfazTetris extends JFrame {
 	 */
 	private Clock clock;
 	
+	private Musica player;
+	
+	private int puntaje;
+	
 	//=================================================
 	//Métodods
 	//=================================================
@@ -94,19 +99,20 @@ public class InterfazTetris extends JFrame {
         clock = new Clock( this);
         invisible.add( clock, BorderLayout.NORTH);
         
-        
-        
-        
         lienzo = new Lienzo(cuadX, cuadY, this );
         add( lienzo, BorderLayout.CENTER );
         
+        player = new Musica(this);
 
 	}
 	
 	public void jugar()
 	{
-		tablero = new Tablero(cuadX, cuadY);
-		clock.timer.start();
+		if (tablero == null) {
+			tablero = new Tablero(cuadX, cuadY);
+			clock.timer.start();
+			reproducir();
+		}
 	}
 	
 	public void bajar() {
@@ -115,11 +121,13 @@ public class InterfazTetris extends JFrame {
 	}
 	
 	public void moverDerecha(){
-		
+		tablero.moverDerecha();
+		pintarCuadrilla();
 	}
 	
 	public void moverIzquierda() {
-		
+		tablero.moverIzquierda();
+		pintarCuadrilla();
 	}
 	public void rotate() {
 		tablero.rotar();
@@ -128,23 +136,32 @@ public class InterfazTetris extends JFrame {
 	public void bajarTeclado() {
 		tablero.bajar();
 		clock.darTimer().restart();
+		pintarCuadrilla();
 	}
 	
 	public void pintarCuadrilla(){
 		int [][] cuadrlla = tablero.imprimirTablero();
-		for (int i = 0; i < cuadX; i++) {
-			for (int j = 0; j < cuadY; j++) {
-				if (cuadrlla[i][j] == 0)
-				{
-					System.out.print("-");
-				}
-				else {
-				    System.out.print("" + cuadrlla[i][j]);
-				}
-			}
-			System.out.println();
-		}
+		puntaje = tablero.darPuntaje();
+		lienzo.cargarDatos(cuadrlla, 0);
 	}
+	
+	public void detener(){
+        player.stop();
+    }
+    public void reproducir(){
+
+        Random rand = new Random();
+        int rnd = (rand.nextInt(2));
+        if(rnd == 0){
+            player.play(player.TYPE_A);
+        }else{
+            player.play(player.TYPE_B);
+        }
+    }
+    
+    public int darPuntaje() {
+    	return puntaje;
+    }
 	
 	
 	 /**
@@ -164,7 +181,6 @@ public class InterfazTetris extends JFrame {
         }
         InterfazTetris interfaz = new InterfazTetris( );
         interfaz.setVisible( true );
-    }
-    
+    } 
  
 }

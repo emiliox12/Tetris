@@ -9,28 +9,23 @@ import javax.swing.Timer;
 
 public class Clock extends JPanel implements ActionListener{
 
-	public final static int SPEED = 1000;
-	public final static int PAUSE = 1000;
+	public final static int SPEED = 500;
+	public final static int PAUSE = 500;
 	
 	InterfazTetris principal;
 	
 	Timer timer;
 	
-	int contador;
-	
 	
 	public Clock(InterfazTetris pPrincipal)
 	{
 		principal = pPrincipal;
-		contador = 0;
 		timer = new Timer(SPEED, this);
 		timer.setInitialDelay(PAUSE);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		principal.bajar();
-	    System.out.println("Hola " + contador);
-	    contador++;
 	}
 	
 	public Timer darTimer()

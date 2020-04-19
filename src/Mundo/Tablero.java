@@ -33,6 +33,11 @@ public class Tablero {
 	 */
 	public IParte piezaHold;
 	
+	/**
+	 * puntaje
+	 */
+	private int puntaje;
+	
 	//*****************METODOS**************//
 	
 	
@@ -40,8 +45,10 @@ public class Tablero {
 		ancho = xMax;
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
-		piezaActual = crearParte(3,4);
+		limpiarTablero();
+		piezaActual = crearParte(2,5);
 		piezaHold = crearParte(-1,-1);
+		puntaje = 0;
 	}
 	
 	private IParte crearParte(int x, int y) {
@@ -77,6 +84,9 @@ public class Tablero {
 		
 	}
 
+	public int darPuntaje() {
+		return puntaje;
+	}
 		
 	/**
 	 * Metodo que limpia el tablero logico
@@ -84,7 +94,7 @@ public class Tablero {
 	public void limpiarTablero (){
 		for (int i = 0 ; i < alto ; i++){
 			for(int j = 0 ; j < ancho ; j++){
-				tableroLogico[i][j]=0;
+				tableroLogico[j][i] = 0;
 			}
 		}
 	}
@@ -102,6 +112,11 @@ public class Tablero {
 			int x = piezaActual.darCentroX() + piezaActual.darX()[i];
 			cuadrilla[y][x] = piezaActual.darColor();
 		}
+		for (int i = 0; i < ancho; i++) {
+			for (int j = 0; j < alto; j++) {
+				
+			}
+		}
 		return cuadrilla;
 	}
 	
@@ -115,20 +130,103 @@ public class Tablero {
 	}
 
 	public void rotar() {
+		Pos[] puntos = piezaActual.tryRotate();
+		for (int i = 0; i < 4; i++)
+		{
+			int x = puntos[i].getX();
+			int y = puntos[i].getY();
+			if (x >= 10 || x < 0 || tableroLogico[y][x] != 0) {
+				return;
+			}
+		}
 	   piezaActual.rotar();
 	}
 	
 	public void moverDerecha() {
-		
+		Pos[] puntos = piezaActual.darNuevosXY(piezaActual.darCentroX() + 1,piezaActual.darCentroY());
+		for (int i = 0; i < 4; i++)
+		{
+			int x = puntos[i].getX();
+			int y = puntos[i].getY();
+			if (x >= 10 || x < 0 || tableroLogico[y][x] != 0) {
+				return;
+			}
+			else if (tableroLogico[y][x] != 0) {
+				return;
+			}
+		}
+		piezaActual.moverDerecha();
 	}
 	
 	public void moverIzquierda() {
-		
+		Pos[] puntos = piezaActual.darNuevosXY(piezaActual.darCentroX() - 1,piezaActual.darCentroY());
+		for (int i = 0; i < 4; i++)
+		{
+			int x = puntos[i].getX();
+			int y = puntos[i].getY();
+			if (x >= 10 || x < 0 || tableroLogico[y][x] != 0) {
+				return;
+			}
+		}
+		piezaActual.moverIzquiqerda();
 	}
 	
 	public void bajar() {
-		
+		Pos[] puntos = piezaActual.darNuevosXY(piezaActual.darCentroX(),piezaActual.darCentroY() + 1);
+		for (int i = 0; i < 4; i++)
+		{
+			int x = puntos[i].getX();
+			int y = puntos[i].getY();
+			if (y >= 20 || tableroLogico[y][x] != 0) {
+				pegarAlTablero();
+				lineaCompleta();
+				return;
+			}
+		}
 		piezaActual.bajar();
+	}
+	
+	public void pegarAlTablero() {
+		for (int i = 0; i < 4; i++)
+		{
+			int y = piezaActual.darCentroY() + piezaActual.darY()[i];
+			int x = piezaActual.darCentroX() + piezaActual.darX()[i];
+			tableroLogico[y][x] = piezaActual.darColor();
+		}
+	}
+
+	private void lineaCompleta() {
+		piezaActual = crearParte(2,5);
+		boolean sent = false;
+		boolean filaLlena = false;
+		int fila = 0;;
+		for (int i = 0; i < ancho && !sent; i++){
+			int contador = 0;
+			for (int j = 0; j < alto; j++){
+				if (tableroLogico[i][j] != 0) {
+					contador++;
+				}
+			}
+			if (contador == 10) {
+				for (int k = 0; k < alto; k++) {
+					tableroLogico[i][k] = 0;
+				}
+				fila = i;
+				filaLlena = true;
+				sent = true;
+				puntaje += 100;
+			}
+		}
+		if (filaLlena)
+		{
+			
+			for (int i = 0; i < alto; i++){
+				for (int j = fila; j > 0; j--){
+					tableroLogico[j][i] = tableroLogico[j-1][i];
+				}
+			}
+			lineaCompleta();
+		}
 	}
 	
 }

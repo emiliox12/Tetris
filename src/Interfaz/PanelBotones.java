@@ -19,6 +19,8 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 	private JButton boton2;
 	private JButton boton3;
 	
+	private boolean pausa = false;
+	
 	private InterfazTetris principal;
 	
 	public PanelBotones(InterfazTetris pInterfaz){
@@ -58,8 +60,6 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		System.out.println(key);
-		
 		if (key == KeyEvent.VK_LEFT)
 		{
 			principal.moverIzquierda();
@@ -74,12 +74,21 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 		}
 		else if (key == KeyEvent.VK_UP)
 		{
-			System.out.println("Hola");
+
 			principal.rotate();
 		}
 		else if (key == KeyEvent.VK_SPACE)
 		{
 			principal.pintarCuadrilla();
+		}
+		else if(key == KeyEvent.VK_P){
+			if(pausa != false){
+				principal.reproducir();
+				pausa = false;
+			}else{
+				principal.detener();
+				pausa = true;
+			}
 		}
 	}
 

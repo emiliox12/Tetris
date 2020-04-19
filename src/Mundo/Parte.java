@@ -66,37 +66,53 @@ public class Parte implements IParte{
 	
 
 	@Override
-	public int[][] moverIzquiqerda() {
-		// TODO Auto-generated method stub
-		return null;
+	public void moverIzquiqerda() {
+		XCentro--;
 	}
 
 	@Override
-	public int[][] moverDerecha() {
-		// TODO Auto-generated method stub
-		return null;
+	public void moverDerecha() {
+		XCentro++;
 	}
 
 	@Override
 	public void bajar() {
 		YCentro++;
 	}
+
+
+	@Override
+	public Pos[] darNuevosXY(int pX, int pY) {
+		Pos[] puntos = new Pos[4];
+		for (int i = 0; i < 4; i++)
+		{
+			Pos n = new Pos((pX +coordX[i]) , (pY + coordY[i]));
+			puntos[i] = n;
+		}
+		return puntos;
+	}
 	
+
+	@Override
+	public Pos[] tryRotate() {
+		Pos[] puntos = new Pos[4];
+		for (int i = 0; i < 4; i++) {
+			int x = coordY[i];
+			int y = -coordX[i];
+			x += XCentro;
+			y += YCentro;
+			Pos p = new Pos(x,y);
+			puntos[i] = p;
+		} 
+		return puntos;
+	}
+
 	public String toString() {
 		return ("X-" + XCentro + " Y-" + YCentro);
 	}
 
-	@Override
-	public int[] darNuevosX(int pX, int pY) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public int[] darVuevosY(int pX, int pY) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	
 	//*****************
