@@ -1,11 +1,14 @@
 package Interfaz;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
 
 import Mundo.*;
 
@@ -82,6 +85,8 @@ public class InterfazTetris extends JFrame {
         setSize( 700, 800 );
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setLocationRelativeTo( null );
+        Image icon = Toolkit.getDefaultToolkit().getImage("data/imagenes/Castillo.png");
+        setIconImage(icon);
         
         // Creación de los paneles.
         panelImagen = new PanelImagen( );
