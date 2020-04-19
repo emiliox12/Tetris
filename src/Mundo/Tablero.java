@@ -2,6 +2,7 @@ package Mundo;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import Figuras.*;
 
 public class Tablero {
@@ -25,7 +26,7 @@ public class Tablero {
 	/**
 	 * Pieza que se esta moviendo
 	 */
-	public IParte PiezaActual;
+	public IParte piezaActual;
 	
 	/**
 	 * Pieza que se guarda
@@ -39,7 +40,7 @@ public class Tablero {
 		ancho = xMax;
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
-		PiezaActual = crearParte(3,4);
+		piezaActual = crearParte(3,4);
 		piezaHold = crearParte(-1,-1);
 	}
 	
@@ -50,25 +51,25 @@ public class Tablero {
 		IParte nuevaParte = null;
 		switch (rnd) {
 		case 1:
-			nuevaParte = (IParte) new CuadradoFigura(x,y);
+			nuevaParte = (IParte) new CuadradoFigura(x, y);
 			break;
 		case 2:
-			nuevaParte = (IParte) new JFigura(x,y);
+			nuevaParte = (IParte) new JFigura(x, y);
 			break;
 		case 3:
-			nuevaParte = (IParte) new LFigura(x,y);
+			nuevaParte = (IParte) new LFigura(x, y);
 			break;
 		case 4:
-			nuevaParte = (IParte) new LineaFigura(x,y);
+			nuevaParte = (IParte) new LineaFigura(x, y);
 			break;
 		case 5:
-			nuevaParte = (IParte) new SFigura(x,y);
+			nuevaParte = (IParte) new SFigura(x, y);
 			break;
 		case 6:
-			nuevaParte = (IParte) new TFigura(x,y);
+			nuevaParte = (IParte) new TFigura(x, y);
 			break;
 		case 7:
-			nuevaParte = (IParte) new ZFigura(x,y);
+			nuevaParte = (IParte) new ZFigura(x, y);
 			break;
 		}
 		System.out.println(nuevaParte);
@@ -96,9 +97,9 @@ public class Tablero {
 		copiarTablero(cuadrilla);
 		for (int i = 0; i < 4; i++)
 		{
-			int x = PiezaActual.darCentroX() + PiezaActual.darX()[i];
-			int y = PiezaActual.darCentroY() + PiezaActual.darY()[i];
-			cuadrilla[x][y] = PiezaActual.darColor();
+			int x = piezaActual.darCentroX() + piezaActual.darX()[i];
+			int y = piezaActual.darCentroY() + piezaActual.darY()[i];
+			cuadrilla[x][y] = piezaActual.darColor();
 		}
 		return cuadrilla;
 	}
@@ -112,8 +113,8 @@ public class Tablero {
 		
 	}
 
-	public void rotarPieza() {
-		
+	public void rotar() {
+	   piezaActual.rotar();
 	}
 	
 	public void moverDerecha() {
@@ -125,7 +126,7 @@ public class Tablero {
 	}
 	
 	public void bajar() {
-		PiezaActual.bajar();
+		piezaActual.bajar();
 	}
 	
 }

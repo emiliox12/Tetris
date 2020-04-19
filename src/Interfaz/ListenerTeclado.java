@@ -17,8 +17,9 @@ public class ListenerTeclado extends JPanel implements KeyListener {
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
 		int key = e.getKeyCode();
+		
+		System.out.println(key);
 		
 		if (key == KeyEvent.VK_LEFT)
 		{
@@ -34,6 +35,7 @@ public class ListenerTeclado extends JPanel implements KeyListener {
 		}
 		else if (key == KeyEvent.VK_UP)
 		{
+			System.out.println("Hola");
 			principal.rotate();
 		}
 		else if (key == KeyEvent.VK_SPACE)

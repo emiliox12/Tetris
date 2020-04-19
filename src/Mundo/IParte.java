@@ -2,7 +2,7 @@ package Mundo;
 
 public interface IParte {
 
-	public int[][] rotar();
+	public void rotar();
 	public int[][] moverIzquiqerda();
 	public int[][] moverDerecha();
 	public void bajar();

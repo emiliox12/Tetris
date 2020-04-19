@@ -122,9 +122,10 @@ public class InterfazTetris extends JFrame {
 		
 	}
 	public void rotate() {
-		
+		tablero.rotar();
 	}
 	public void bajarTeclado() {
+		tablero.bajar();
 		clock.darTimer().restart();
 	}
 	

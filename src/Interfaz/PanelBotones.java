@@ -9,7 +9,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class PanelBotones extends JPanel implements ActionListener{
+public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 
 	public final static String PLAY = "play";
 	public final static String BOTON2 = "boton2";
@@ -28,6 +28,7 @@ public class PanelBotones extends JPanel implements ActionListener{
 	
         bPlay = new JButton( "Play" );
         bPlay.setActionCommand( PLAY );
+        bPlay.addKeyListener(this);
         bPlay.addActionListener( this );
         add( bPlay );
 
@@ -46,15 +47,55 @@ public class PanelBotones extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		if (command == PLAY)
-		{
+		if (command == PLAY){
 			principal.jugar();
 		}
-		else if (command == BOTON2)
+		else if (command == BOTON2) {
+			principal.pintarCuadrilla();
+		}
+	}
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		System.out.println(key);
+		
+		if (key == KeyEvent.VK_LEFT)
+		{
+			principal.moverIzquierda();
+		}
+		else if (key == KeyEvent.VK_RIGHT)
+		{
+			principal.moverDerecha();
+		}
+		else if (key == KeyEvent.VK_DOWN)
+		{
+			principal.bajarTeclado();
+		}
+		else if (key == KeyEvent.VK_UP)
+		{
+			System.out.println("Hola");
+			principal.rotate();
+		}
+		else if (key == KeyEvent.VK_SPACE)
 		{
 			principal.pintarCuadrilla();
 		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
 	
 }
