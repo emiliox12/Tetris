@@ -40,10 +40,6 @@ public class InterfazTetris extends JFrame {
 	 */
 	private Tablero tablero;
 	
-	/**
-	 * Panel de mejores resultados;
-	 */
-	private PanelMejoresPuntajes pMejoresPuntajes;
 	
 	/**
 	 * Panel de imagen
@@ -121,27 +117,37 @@ public class InterfazTetris extends JFrame {
 	}
 	
 	public void bajar() {
+		if (tablero.darEstado() == true) {
 		tablero.bajar();
 		pintarCuadrilla();
+		}
 	}
 	
 	public void moverDerecha(){
-		tablero.moverDerecha();
-		pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.moverDerecha();
+			pintarCuadrilla();
+		}
 	}
 	
 	public void moverIzquierda() {
-		tablero.moverIzquierda();
-		pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.moverIzquierda();
+			pintarCuadrilla();
+		}
 	}
 	public void rotate() {
-		tablero.rotar();
-		pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.rotar();
+			pintarCuadrilla();
+		}
 	}
 	public void bajarTeclado() {
-		tablero.bajar();
-		clock.darTimer().restart();
-		pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.bajar();
+			clock.darTimer().restart();
+			pintarCuadrilla();
+		}
 	}
 	
 	public void pintarCuadrilla(){
@@ -158,15 +164,16 @@ public class InterfazTetris extends JFrame {
         Random rand = new Random();
         int rnd = (rand.nextInt(2));
         if(rnd == 0){
-            player.play(player.TYPE_A);
+            player.play(Musica.TYPE_A);
         }else{
-            player.play(player.TYPE_B);
+            player.play(Musica.TYPE_B);
         }
     }
     
     public int darPuntaje() {
     	return puntaje;
     }
+    
 	
 	
 	 /**

@@ -38,6 +38,11 @@ public class Tablero {
 	 */
 	private int puntaje;
 	
+	/**
+	 * Estado del juego
+	 */
+	private boolean estado;
+	
 	//*****************METODOS**************//
 	
 	
@@ -46,9 +51,10 @@ public class Tablero {
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
 		limpiarTablero();
-		piezaActual = crearParte(2,5);
+		piezaActual = crearParte(1,5);
 		piezaHold = crearParte(-1,-1);
 		puntaje = 0;
+		estado = true;
 	}
 	
 	private IParte crearParte(int x, int y) {
@@ -193,7 +199,8 @@ public class Tablero {
 	}
 
 	private void lineaCompleta() {
-		piezaActual = crearParte(2,5);
+		piezaActual = crearParte(1,5);
+		probarPerdida();
 		boolean sent = false;
 		boolean filaLlena = false;
 		int fila = 0;;
@@ -225,5 +232,22 @@ public class Tablero {
 			lineaCompleta();
 		}
 	}
-	
+
+	private void probarPerdida() {
+		Pos[] puntos = piezaActual.darNuevosXY(piezaActual.darCentroX(),piezaActual.darCentroY());
+		for (int i = 0; i < 4; i++)
+		{
+			int x = puntos[i].getX();
+			int y = puntos[i].getY();
+			if (tableroLogico[y][x] != 0) {
+				estado = false;
+				piezaActual =null;
+			}
+		}
+	}
+	public boolean darEstado() {
+		return estado;
+	}
+		
+
 }
