@@ -51,7 +51,7 @@ public class Tablero {
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
 		limpiarTablero();
-		piezaActual = crearParte(1,5);
+		piezaActual = crearParte(0,5);
 		piezaHold = crearParte(-1,-1);
 		puntaje = 0;
 		estado = true;
@@ -104,7 +104,7 @@ public class Tablero {
 	}
 
 	/**
-	 * MÃ©todo que mueve la pieza actual
+	 * Método que mueve la pieza actual
 	 */
 	public int[][] imprimirTablero(){
 		int[][] cuadrilla = new int[ancho][alto];

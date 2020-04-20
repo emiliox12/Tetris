@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -25,7 +26,11 @@ public class Clock extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		try{
 		principal.bajar();
+		}catch (Exception er){
+			return;
+		}
 	}
 	
 	public Timer darTimer()
