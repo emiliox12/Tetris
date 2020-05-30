@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -72,7 +71,7 @@ public class InterfazTetris extends JFrame {
 	private int puntaje;
 	
 	//=================================================
-	//Métodods
+	//MÃ©todods
 	//=================================================
 	
 	public InterfazTetris()
@@ -85,7 +84,7 @@ public class InterfazTetris extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage("data/imagenes/Castillo.png");
         setIconImage(icon);
         
-        // Creación de los paneles.
+        // CreaciÃ³n de los paneles.
         panelImagen = new PanelImagen( );
         add( panelImagen, BorderLayout.NORTH );
         
@@ -118,24 +117,11 @@ public class InterfazTetris extends JFrame {
 	}
 	
 	public void bajar() {
-        if (tablero.darEstado() == true) {
-        tablero.bajar();
-        pintarCuadrilla();
-        } else {
-
-            detener();
-            clock.timer.stop();
-            int a = JOptionPane.showConfirmDialog(this, "Has perdido, deseas reinciar?");
-            if( a == JOptionPane.YES_OPTION){
-                tablero = null;
-                jugar();
-            }else{
-
-            JOptionPane.showMessageDialog(this, "Gracias por jugar !");
-            Runtime.getRuntime().exit(0);
-            }
-        }
-    }
+		if (tablero.darEstado() == true) {
+		tablero.bajar();
+		pintarCuadrilla();
+		}
+	}
 	
 	public void moverDerecha(){
 		if (tablero.darEstado() == true) {
@@ -191,8 +177,8 @@ public class InterfazTetris extends JFrame {
 	
 	
 	 /**
-     * Este método ejecuta la aplicación, creando una nueva interfaz.
-     * @param pArgs Argumentos para la ejecución.
+     * Este mÃ©todo ejecuta la aplicaciÃ³n, creando una nueva interfaz.
+     * @param pArgs Argumentos para la ejecuciÃ³n.
      */
     public static void main( String[] pArgs )
     {

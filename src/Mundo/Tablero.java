@@ -3,6 +3,8 @@ package Mundo;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.lang.model.element.Parameterizable;
+
 import Figuras.*;
 
 public class Tablero {
@@ -21,8 +23,13 @@ public class Tablero {
 	 */
 	public int [][] tableroLogico;
 	
+	public int [][] piezasNext;
+	
+	public int [][] espacioPiezaHold;
 	public ArrayList<IParte> partes;
 	
+	
+	private boolean HoldLock = false;
 	/**
 	 * Pieza que se esta moviendo
 	 */
@@ -43,6 +50,7 @@ public class Tablero {
 	 */
 	private boolean estado;
 	
+	
 	//*****************METODOS**************//
 	
 	
@@ -50,8 +58,10 @@ public class Tablero {
 		ancho = xMax;
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
+		espacioPiezaHold = new int [4][2];
 		limpiarTablero();
-		piezaActual = crearParte(0,5);
+		partes = new ArrayList<IParte>();
+		nuevasPiezas();
 		piezaHold = crearParte(-1,-1);
 		puntaje = 0;
 		estado = true;
@@ -104,11 +114,12 @@ public class Tablero {
 	}
 
 	/**
-	 * Método que mueve la pieza actual
+	 * MÃ©todo que mueve la pieza actual
 	 */
 	public int[][] imprimirTablero(){
 		int[][] cuadrilla = new int[ancho][alto];
 		copiarTablero(cuadrilla);
+		try{
 		for (int i = 0; i < 4; i++)
 		{
 			int y = piezaActual.darCentroY() + piezaActual.darY()[i];
@@ -119,6 +130,8 @@ public class Tablero {
 			for (int j = 0; j < alto; j++) {
 				
 			}
+		}}catch(Exception e){
+			estado = false;
 		}
 		return cuadrilla;
 	}
@@ -138,7 +151,7 @@ public class Tablero {
 		{
 			int x = puntos[i].getX();
 			int y = puntos[i].getY();
-			if (x >= 10 || x < 0 || tableroLogico[y][x] != 0) {
+			if (x >= 10 || x < 0 || y < 0|| tableroLogico[y][x] != 0) {
 				return;
 			}
 		}
@@ -182,7 +195,8 @@ public class Tablero {
 			int y = puntos[i].getY();
 			if (y >= 20 || tableroLogico[y][x] != 0) {
 				pegarAlTablero();
-				lineaCompleta();
+				lineaTurno();
+				//lineaCompleta();
 				return;
 			}
 		}
@@ -197,9 +211,73 @@ public class Tablero {
 			tableroLogico[y][x] = piezaActual.darColor();
 		}
 	}
-
+	public void pegarALaLista(IParte part, int y, int [][] pMatriz){
+		switch(part.darColor()){
+		
+		case 1:
+			pMatriz[y][0] = 1;
+			pMatriz[y][1] = 1;
+			pMatriz[y+1][0] = 1;
+			pMatriz[y+1][1] = 1;
+		break;
+		
+		case 2:
+			pMatriz[y][1] = 2;
+			pMatriz[y+1][1] = 2;
+			pMatriz[y+2][1] = 2;
+			pMatriz[y+2][0] = 2;
+		
+		break;
+		
+		case 3:
+			pMatriz[y][0] = 3;
+			pMatriz[y+1][0] = 3;
+			pMatriz[y+2][0] = 3;
+			pMatriz[y+2][1] = 3;
+		
+		break;
+		
+		case 4:
+			pMatriz[y][0] = 4;
+			pMatriz[y+1][0] = 4;
+			pMatriz[y+2][0] = 4;
+			pMatriz[y+3][0] = 4;
+		
+		break;
+		
+		case 5:
+			pMatriz[y][1] = 5;
+			pMatriz[y+1][1] = 5;
+			pMatriz[y+1][0] = 5;
+			pMatriz[y+2][0] = 5;
+		
+		break;
+		
+		case 6:
+			pMatriz[y][0] = 6;
+			pMatriz[y+1][0] = 6;
+			pMatriz[y+1][1] = 6;
+			pMatriz[y+2][0] = 6;
+		
+		break;
+		
+		case 7:
+			pMatriz[y][0] = 7;
+			pMatriz[y+1][0] = 7;
+			pMatriz[y+1][1] = 7;
+			pMatriz[y+2][1] = 7;
+		break;
+		
+		}
+	}
+	
+	private void lineaTurno (){
+		nuevasPiezas();
+		lineaCompleta();
+	}
 	private void lineaCompleta() {
-		piezaActual = crearParte(1,5);
+		//piezaActual = crearParte(1,5);
+		//nuevasPiezas();
 		probarPerdida();
 		boolean sent = false;
 		boolean filaLlena = false;
@@ -229,6 +307,7 @@ public class Tablero {
 					tableroLogico[j][i] = tableroLogico[j-1][i];
 				}
 			}
+			
 			lineaCompleta();
 		}
 	}
@@ -247,6 +326,113 @@ public class Tablero {
 	}
 	public boolean darEstado() {
 		return estado;
+	}
+	
+	public void reinstanciarPiezaHold (IParte piezaAct){
+		switch(piezaAct.darColor()){
+		case 1:
+			piezaHold = new CuadradoFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		case 2:
+			piezaHold = new JFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		case 3:
+			piezaHold = new LFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		case 4:
+			piezaHold = new LineaFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		case 5:
+			piezaHold = new SFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		case 6:
+			piezaHold = new TFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		case 7:
+			piezaHold = new ZFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
+		break;
+		}
+	}
+	public void activarHold (){
+		for(int i=0;i<4;i++){
+			for(int j=0;j<2;j++){
+				espacioPiezaHold[i][j]=0;
+			}
+		}
+		
+		if(HoldLock == false){
+		piezaHold = piezaActual;
+		pegarALaLista(piezaHold, 0, espacioPiezaHold);
+		nuevasPiezas();
+		HoldLock = true;
+		}else{
+		if(swapConHold(piezaHold,piezaActual.darCentroX(),piezaActual.darCentroY())){
+				IParte temp = piezaActual;
+				piezaActual = piezaHold;
+				piezaActual.setCentroX(temp.darCentroX());
+				piezaActual.setCentroY(temp.darCentroY());
+				piezaHold = temp;
+				pegarALaLista(piezaHold, 0, espacioPiezaHold);
+			}else{
+		pegarALaLista(piezaHold, 0, espacioPiezaHold);
+			}
+			}
+	}
+	
+	public boolean swapConHold (IParte part, int pX, int pY){
+		Boolean sePuede = true;
+		Pos[] puntos = piezaHold.darNuevosXY(pX, pY);
+		for (int i = 0; i < 4; i++)
+		{
+			int x = puntos[i].getX();
+			int y = puntos[i].getY();
+			if (x >= 10 || x < 0 || tableroLogico[y][x] != 0) {
+				sePuede =  false;
+			}
+			else if (y >= 20 || y < 0)
+			{
+				sePuede = false;
+			}
+		}
+		return sePuede;
+	}
+	
+	public void nuevasPiezas (){
+		if(partes.isEmpty()){
+			piezasNext = new int[16][2];
+			for(int a=0;a<14;a++){
+				for(int b=0;b<2;b++){
+					piezasNext[a][b]=0;
+				}
+			}
+			for(int i=0;i<5;i++){
+				IParte part = crearParte(1, 5);
+				partes.add(part);
+			}
+			piezaActual = partes.get(partes.size()-1);
+			partes.remove(partes.size()-1);
+		}else{
+
+			piezaActual = partes.get(0);
+			partes.remove(0);
+			IParte part = crearParte(1,5);
+			partes.add(part);
+		}
+		limpiarListaPiezasNext();
+		int movLogY = 0;
+		for(int t=0;t<partes.size();t++){
+
+				pegarALaLista(partes.get(t), movLogY,piezasNext);
+				movLogY+=4;
+		}
+	}
+	
+	public void limpiarListaPiezasNext(){
+		for(int i=0;i<15;i++){
+			for(int j=0;j<2;j++){
+				piezasNext[i][j]=0;
+			}
+		}
 	}
 		
 

@@ -45,7 +45,7 @@ public class Lienzo extends JPanel {
 	/**
 	 * Matriz que tiene que pintar.
 	 */
-	private int[][] tableroDeJuego = new int[20][10];
+	private int[][] tableroDeJuego = new int[InterfazTetris.cuadX][InterfazTetris.cuadY];
 	private int puntaje=0;
 	
 	
@@ -114,8 +114,8 @@ public class Lienzo extends JPanel {
 		}
 		
 		public void rellenoDePrueba (){
-			for(int i=0;i<20;i++){
-				for(int j=0;j<10;j++){
+			for(int i=0; i < InterfazTetris.cuadY;i++){
+				for(int j = 0; j < InterfazTetris.cuadX;j++){
 					if(i%2==0){
 						if(j%2 ==0|| i == 19){
 							tableroDeJuego[i][j]=1;

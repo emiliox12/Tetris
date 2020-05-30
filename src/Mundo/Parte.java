@@ -21,7 +21,7 @@ public class Parte implements IParte{
 	
 	/**
 	 * Crea una parte en esa posicion
-	 * @param pX posición en donde se crean;
+	 * @param pX posiciÃ³n en donde se crean;
 	 * @param pY
 	 */
 	public Parte(int pY,int pX){
@@ -63,7 +63,13 @@ public class Parte implements IParte{
 		}
 	}
 	
+	public void setCentroX (int a){
+		XCentro = a;
+	}
 	
+	public void setCentroY (int a){
+		YCentro = a;
+	}
 
 	@Override
 	public void moverIzquiqerda() {

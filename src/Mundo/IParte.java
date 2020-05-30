@@ -13,5 +13,7 @@ public interface IParte {
 	public Pos[] darNuevosXY(int pX, int pY);
 	public Pos[] tryRotate();
 	public int darColor();
+	public void setCentroX (int a);
+	public void setCentroY (int a);
 	
 }
