@@ -3,9 +3,11 @@ package Interfaz;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowListener;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -66,9 +68,22 @@ public class InterfazTetris extends JFrame {
 	 */
 	private Clock clock;
 	
+	private DialogoIniciarSesion dialogoIniciarSesion;
+	
+	private DialogoInicioJugador dialogoInicioJugador;
+	
+	private DialogoRegistrar dialogoRegistro;
+	
+	/**
+	 * Controlador de las comunicaciónes
+	 */
+	private ControladorComunicaciones controlador;
+	
 	private Musica player;
 	
 	private int puntaje;
+	
+	private boolean activo;
 	
 	//=================================================
 	//Métodods
@@ -76,6 +91,7 @@ public class InterfazTetris extends JFrame {
 	
 	public InterfazTetris()
 	{
+
 		setLayout( new BorderLayout( ) );
         setTitle( "Tetris" );
         setSize( 700, 800 );
@@ -83,6 +99,13 @@ public class InterfazTetris extends JFrame {
         setLocationRelativeTo( null );
         Image icon = Toolkit.getDefaultToolkit().getImage("data/imagenes/Castillo.png");
         setIconImage(icon);
+        
+        dialogoInicioJugador = new DialogoInicioJugador( this );
+        dialogoRegistro = new DialogoRegistrar( this );
+        dialogoIniciarSesion = new DialogoIniciarSesion( this );
+        dialogoInicioJugador.setVisible( true );
+        
+        controlador = new ControladorComunicaciones(this);
         
         // Creación de los paneles.
         panelImagen = new PanelImagen( );
@@ -117,36 +140,46 @@ public class InterfazTetris extends JFrame {
 	}
 	
 	public void bajar() {
-		if (tablero.darEstado() == true) {
-		tablero.bajar();
-		pintarCuadrilla();
+		if (activo) {
+			if (tablero.darEstado() == true) {
+			tablero.bajar();
+				pintarCuadrilla();
+			}
 		}
 	}
 	
 	public void moverDerecha(){
-		if (tablero.darEstado() == true) {
-			tablero.moverDerecha();
-			pintarCuadrilla();
+		if (activo) {
+			if (tablero.darEstado() == true) {
+				tablero.moverDerecha();
+				pintarCuadrilla();
+			}
 		}
 	}
 	
 	public void moverIzquierda() {
-		if (tablero.darEstado() == true) {
-			tablero.moverIzquierda();
-			pintarCuadrilla();
+		if (activo) {
+			if (tablero.darEstado() == true) {
+				tablero.moverIzquierda();
+				pintarCuadrilla();
+			}
 		}
 	}
 	public void rotate() {
-		if (tablero.darEstado() == true) {
-			tablero.rotar();
-			pintarCuadrilla();
+		if (activo) {
+			if (tablero.darEstado() == true) {
+				tablero.rotar();
+				pintarCuadrilla();
+			}
 		}
 	}
 	public void bajarTeclado() {
-		if (tablero.darEstado() == true) {
-			tablero.bajar();
-			clock.darTimer().restart();
-			pintarCuadrilla();
+		if (activo) {
+			if (tablero.darEstado() == true) {
+				tablero.bajar();
+				clock.darTimer().restart();
+				pintarCuadrilla();
+			}
 		}
 	}
 	
@@ -192,7 +225,63 @@ public class InterfazTetris extends JFrame {
             e.printStackTrace( );
         }
         InterfazTetris interfaz = new InterfazTetris( );
-        interfaz.setVisible( true );
     } 
+    
+    //******************Conectividad*******************//
+    
+    /**
+     * M�todo que muestra el dialogo crear cuenta
+     */
+    public void mostrarDialogoCrearCuenta( )
+    {
+        dialogoRegistro.setVisible( true );
+    }
+
+    /**
+     * M�todo que muestra el dialogo iniciar sesi�n
+     */
+    public void mostrarDialogoIniciarSesion( )
+    {
+        dialogoIniciarSesion.setVisible( true );
+    }
+    
+    /**
+     * TODO
+     */
+    public void mostrarDialogoInicio( )
+    {
+        dialogoInicioJugador.setVisible( true );
+    }
+    
+    
+    public void iniciarSesion( String pAlias, String pPassword, String pAvatar)
+    {
+    	controlador.iniciarSesion(pAlias, pPassword, pAvatar);
+    }
+
+    /**
+     * M�todo para crear una nueva cuenta.
+     * @param pAlias Alias del jugador. pAlias != null && pAlias != "".
+     * @param pNombre Nombre del jugador. pNombre != null && pNombre != "".
+     * @param pApellido Apellidos del jugador. pApellido != null && pApellido != "".
+     * @param pPassword Contrase�a del jugador. pPassword != null && pAvatar != "".
+     * @param pAvatar Avatar seleccionado por el jugador. pAvatar != null && pAvatar != "".
+     */
+    public void crearRegistro( String pAlias, String pNombre, String pApellido, String pPassword, String pAvatar )
+    {
+    	controlador.registrarCuenta(pAlias, pNombre, pApellido, pPassword, pAvatar);
+    }
+    
+    public void configurarDatosConexion( String pServidor, int pPuerto )
+    {
+    	try {
+			controlador.establecerConexion(pServidor, pPuerto);;
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog( this, "Error al ejecutar la aplicación:" + e.getMessage( ) );
+		}
+        dialogoIniciarSesion.setVisible( false );
+        dialogoInicioJugador.setVisible( false );
+
+    }
  
 }

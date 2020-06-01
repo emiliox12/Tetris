@@ -1,6 +1,14 @@
 package Mundo;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.lang.model.element.Parameterizable;
@@ -17,6 +25,8 @@ public class Tablero {
 	private int alto;
 	
 	//*****************ATRIBUTOS**************//
+	
+    private int estadoJuego;
 	
 	/**
 	 * Matriz que representa las posciones logicas
