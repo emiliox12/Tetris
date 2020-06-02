@@ -499,10 +499,48 @@ public class Tablero {
 		}
 	}
 	
-	public void generarFichas(String[] piezas) {
-		for (String p : piezas) {
-			
+public void generarPiezasPorInformacion (String [] piezas){
+		
+		//Elimina toda pieza que contenga el arreglo
+		for(int i=0;i<partes.size();i++){
+			partes.remove(i);
 		}
+		for(int j=0;j<piezas.length;j++){
+			String actual = piezas[j];
+			IParte parteActual;
+			switch (actual){
+			
+			case CUADRADO:
+				parteActual = new CuadradoFigura(1,5);
+			break;
+				
+			case J:
+				parteActual = new JFigura(1,5);
+			break;
+			
+			case L:
+				parteActual = new LFigura(1,5);
+			break;
+			
+			case LINEA:
+				parteActual = new LineaFigura(1,5);
+			break;
+			
+			case S:
+				parteActual = new SFigura(1,5);
+			break;
+			
+			case T:
+				parteActual = new TFigura(1,5);
+			break;
+			
+			case Z:
+				parteActual = new ZFigura(1,5);
+			break;
+			}
+		partes.add(piezaActual);
+		}
+		
 	}
 	
 	public void limpiarListaPiezasNext(){

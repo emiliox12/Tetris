@@ -319,7 +319,7 @@ public class InterfazTetris extends JFrame {
 	}
 	
 	public void iniciarPiezas(String[] piezas) {
-		tablero.generarFichas(piezas);
+		tablero.generarPiezasPorInformacion(piezas);
 	}
  
 }
