@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -16,10 +17,10 @@ import Mundo.*;
 
 public class InterfazTetris extends JFrame {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
+	
+	
 	
 	/**
 	 * Vlores de las casillas;
@@ -133,52 +134,57 @@ public class InterfazTetris extends JFrame {
 	public void jugar()
 	{
 		if (tablero == null) {
-			tablero = new Tablero(cuadX, cuadY);
+			tablero = new Tablero(cuadX, cuadY, this);
 			clock.timer.start();
 			reproducir();
 		}
 	}
 	
 	public void bajar() {
-		if (activo) {
-			if (tablero.darEstado() == true) {
-			tablero.bajar();
-				pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+		tablero.bajar();
+			pintarCuadrilla();
+			if (activo) {
+				controlador.moverPieza(ControladorComunicaciones.DOWN);
 			}
 		}
 	}
 	
 	public void moverDerecha(){
-		if (activo) {
-			if (tablero.darEstado() == true) {
-				tablero.moverDerecha();
-				pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.moverDerecha();
+			pintarCuadrilla();
+			if (activo) {
+				controlador.moverPieza(ControladorComunicaciones.RIGHT);
 			}
 		}
 	}
 	
 	public void moverIzquierda() {
-		if (activo) {
-			if (tablero.darEstado() == true) {
-				tablero.moverIzquierda();
-				pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.moverIzquierda();
+			pintarCuadrilla();
+			if (activo) {
+				controlador.moverPieza(ControladorComunicaciones.LEFT);
 			}
 		}
 	}
 	public void rotate() {
-		if (activo) {
-			if (tablero.darEstado() == true) {
-				tablero.rotar();
-				pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.rotar();
+			pintarCuadrilla();
+			if (activo) {
+				controlador.moverPieza(ControladorComunicaciones.ROTAR);
 			}
 		}
 	}
 	public void bajarTeclado() {
-		if (activo) {
-			if (tablero.darEstado() == true) {
-				tablero.bajar();
-				clock.darTimer().restart();
-				pintarCuadrilla();
+		if (tablero.darEstado() == true) {
+			tablero.bajar();
+			clock.darTimer().restart();
+			pintarCuadrilla();
+			if (activo) {
+				controlador.moverPieza(ControladorComunicaciones.DOWN);
 			}
 		}
 	}
@@ -205,6 +211,10 @@ public class InterfazTetris extends JFrame {
     
     public int darPuntaje() {
     	return puntaje;
+    }
+    
+    public boolean darActivo() {
+    	return activo;
     }
     
 	
@@ -246,7 +256,7 @@ public class InterfazTetris extends JFrame {
     }
     
     /**
-     * TODO
+     * Muestra el dialogo de iniciar sesion
      */
     public void mostrarDialogoInicio( )
     {
@@ -283,5 +293,33 @@ public class InterfazTetris extends JFrame {
         dialogoInicioJugador.setVisible( false );
 
     }
+    
+    public void cambiarActivo() {
+    	if (activo) {
+    		controlador.cambiarActivo();
+    	}
+    	activo = !activo;
+    }
+
+	public void accionarHold() {
+		tablero.activarHold();
+	}
+
+	public ArrayList<String> darPartes() {
+		return tablero.darPartes();
+		
+	}
+	
+	public void crearPartes() {
+		controlador.iniciarPiezas();
+	}
+	
+	public void nuevaPieza(String pieza) {
+		tablero.nuevasPiezas(pieza);
+	}
+	
+	public void iniciarPiezas(String[] piezas) {
+		tablero.generarFichas(piezas);
+	}
  
 }

@@ -14,6 +14,7 @@ public class Parte implements IParte{
 	protected int[] coordX;
 	protected int[] coordY;
 	
+	protected String nombre;
 	
 	protected int color;
 	
@@ -114,7 +115,7 @@ public class Parte implements IParte{
 	}
 
 	public String toString() {
-		return ("X-" + XCentro + " Y-" + YCentro);
+		return (nombre);
 	}
 
 

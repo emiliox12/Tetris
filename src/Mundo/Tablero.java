@@ -14,6 +14,7 @@ import java.util.Random;
 import javax.lang.model.element.Parameterizable;
 
 import Figuras.*;
+import Interfaz.InterfazTetris;
 
 public class Tablero {
 
@@ -60,11 +61,25 @@ public class Tablero {
 	 */
 	private boolean estado;
 	
+	private InterfazTetris principal;
+	
+    /**
+     * Figuras posibles
+     */
+    public final static String CUADRADO = "CUADRADO";
+    public final static String J = "J";
+    public final static String L = "L";
+    public final static String LINEA = "LINEA";
+    public final static String S = "S";
+    public final static String T = "T";
+    public final static String Z = "Z";
+	
 	
 	//*****************METODOS**************//
 	
 	
-	public Tablero (int xMax, int yMax){
+	public Tablero (int xMax, int yMax, InterfazTetris pPrincipal){
+		principal = pPrincipal;
 		ancho = xMax;
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
@@ -106,6 +121,34 @@ public class Tablero {
 		}
 		return nuevaParte;
 		
+	}
+	
+	private IParte crearParte(int x, int y, String parte) {
+		IParte nuevaParte = null;
+		switch (parte) {
+		case CUADRADO:
+			nuevaParte = (IParte) new CuadradoFigura(x, y);
+			break;
+		case J:
+			nuevaParte = (IParte) new JFigura(x, y);
+			break;
+		case L:
+			nuevaParte = (IParte) new LFigura(x, y);
+			break;
+		case LINEA:
+			nuevaParte = (IParte) new LineaFigura(x, y);
+			break;
+		case S:
+			nuevaParte = (IParte) new SFigura(x, y);
+			break;
+		case T:
+			nuevaParte = (IParte) new TFigura(x, y);
+			break;
+		case Z:
+			nuevaParte = (IParte) new ZFigura(x, y);
+			break;
+		}
+		return nuevaParte;
 	}
 
 	public int darPuntaje() {
@@ -286,8 +329,6 @@ public class Tablero {
 		lineaCompleta();
 	}
 	private void lineaCompleta() {
-		//piezaActual = crearParte(1,5);
-		//nuevasPiezas();
 		probarPerdida();
 		boolean sent = false;
 		boolean filaLlena = false;
@@ -409,18 +450,7 @@ public class Tablero {
 	
 	public void nuevasPiezas (){
 		if(partes.isEmpty()){
-			piezasNext = new int[16][2];
-			for(int a=0;a<14;a++){
-				for(int b=0;b<2;b++){
-					piezasNext[a][b]=0;
-				}
-			}
-			for(int i=0;i<5;i++){
-				IParte part = crearParte(1, 5);
-				partes.add(part);
-			}
-			piezaActual = partes.get(partes.size()-1);
-			partes.remove(partes.size()-1);
+			generarFichas();
 		}else{
 
 			piezaActual = partes.get(0);
@@ -437,12 +467,59 @@ public class Tablero {
 		}
 	}
 	
+	public void nuevasPiezas (String pieza){
+		piezaActual = partes.get(0);
+		partes.remove(0);
+		IParte part = crearParte(1,5, pieza);
+		partes.add(part);
+		limpiarListaPiezasNext();
+		int movLogY = 0;
+		for(int t=0;t<partes.size();t++){
+
+				pegarALaLista(partes.get(t), movLogY,piezasNext);
+				movLogY+=4;
+		}
+	}
+
+	private void generarFichas() {
+		if(principal.darActivo()) {
+			piezasNext = new int[16][2];
+			for(int a=0;a<14;a++){
+				for(int b=0;b<2;b++){
+					piezasNext[a][b]=0;
+				}
+			}
+			for(int i=0;i<5;i++){
+				IParte part = crearParte(1, 5);
+				partes.add(part);
+			}
+			piezaActual = partes.get(partes.size()-1);
+			partes.remove(partes.size()-1);
+			principal.crearPartes();
+		}
+	}
+	
+	public void generarFichas(String[] piezas) {
+		for (String p : piezas) {
+			
+		}
+	}
+	
 	public void limpiarListaPiezasNext(){
 		for(int i=0;i<15;i++){
 			for(int j=0;j<2;j++){
 				piezasNext[i][j]=0;
 			}
 		}
+	}
+
+	public ArrayList<String> darPartes() {
+		ArrayList<String> nombres = new ArrayList<String>();
+		for (IParte parte : partes) {
+			nombres.add(parte.toString());
+		}
+		return nombres;
+		
 	}
 		
 

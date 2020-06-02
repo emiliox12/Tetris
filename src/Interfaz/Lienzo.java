@@ -113,6 +113,25 @@ public class Lienzo extends JPanel {
 			
 		}
 		
+		public void dibujarDisplayTurno (Graphics2D g, int pX, int pY){
+			boolean cond = principal.darActivo();
+			Font font = new Font(Font.SANS_SERIF, Font.BOLD, 16);
+			Rectangle2D casilla = new Rectangle2D.Double(pX,pY-16,120,40);
+			g.setFont(font);
+			if(cond == false){
+				g.setColor(Color.RED);
+				g.draw(casilla);
+				g.drawString(" Turno del otro", pX, pY);
+				g.drawString("jugador", pX+30, pY+16);
+			}else{
+				g.setColor(Color.GREEN);
+
+				g.draw(casilla);
+				g.drawString("¡Tu turno!", pX+20, pY+10);
+				
+			}
+		}
+		
 		public void rellenoDePrueba (){
 			for(int i=0; i < InterfazTetris.cuadY;i++){
 				for(int j = 0; j < InterfazTetris.cuadX;j++){

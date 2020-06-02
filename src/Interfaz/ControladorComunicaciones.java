@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import Mundo.IParte;
 import Mundo.Jugador;
 
 
@@ -51,29 +53,34 @@ public class ControladorComunicaciones {
     public static final int SIN_CONECTAR = 0;
 
     /**
-     * Mensaje para enviar la informaci�n de un ataque.
+     * Mensaje para enviar la informaci�n de un movimiento.
      */
-    public static final String ATAQUE = "ATAQUE";
+    public static final String MOVER = "MOVER";
 
     /**
-     * Mensaje para indicar el resultado de un ataque.
+     * Mensaje para enviar informacion de rotación
      */
-    public static final String DANIO = "DANIO";
+    public static final String ROTAR = "ROTAR";
 
     /**
      * Mensaje para indicar que el jugador cambi� de pok�mon.
      */
-    public static final String CAMBIO_POKEMON = "CAMBIO_POKEMON";
+    public static final String GENERAR_PARTE = "GENERAR_PARTE";
 
     /**
      * Mensaje para indicar que se cambi� autom�ticamente el pok�mon del jugador.
      */
-    public static final String CAMBIO_POKEMON_AUTO = "CAMBIO_POKEMON_AUTO";
+    public static final String CAMBIAR_PARTE = "CAMBIAR_PARTE";
+    
+    /**
+     * Mensaje para indicar que el jugador cambi� de pok�mon.
+     */
+    public static final String INICIAR_PARTES= "INICIAR_PARTES";
 
     /**
      * Mensaje para indicar la selecci�n de un pok�mon.
      */
-    public static final String SELECCION = "SELECCION";
+    public static final String CAMBIAR_ACTIVO = "CAMBIAR_ACTIVO";
 
     /**
      * Mensaje de login de un jugador.
@@ -119,6 +126,24 @@ public class ControladorComunicaciones {
      * Indica que se acaba de enviar la jugada del jugador y se est� esperando la respuesta del oponente.
      */
     public static final int ESPERANDO_RESPUESTA = 3;
+    
+    /**
+     * Direcciones de movimiento
+     */
+    public final static String DOWN = "DOWN";
+    public final static String LEFT = "LEFT";
+    public final static String RIGHT = "RIGHT";
+    
+    /**
+     * Figuras posibles
+     */
+    public final static String CUADRADO = "CUADRADO";
+    public final static String J = "J";
+    public final static String L = "L";
+    public final static String LINEA = "LINEA";
+    public final static String S = "S";
+    public final static String T = "T";
+    public final static String Z = "Z";
 	
     /**
      * Puerto usado para conectarse.
@@ -158,28 +183,109 @@ public class ControladorComunicaciones {
     private InterfazTetris principal;
     
     
-    //**************Métodos***********************//
-    
+    //********************************************//
+    //------------------Métodos-------------------//
+    //********************************************//
 
+    //******************wright*********************//
+    
 	public ControladorComunicaciones(InterfazTetris pPrincipal) {
 		principal = pPrincipal;
 	}
 	
-	
-
-    
+	/**
+	 * Inicia la seción del jugador
+	 * @param pAlias alias del jugador 
+	 * @param pPassword contraseña del jugador
+	 * @param pAvatar avatar del jugador
+	 */
     public void iniciarSesion(String pAlias, String pPassword, String pAvatar )
     {
-    	outWriter.println(LOGIN + SEPARADOR_COMANDO + pAlias + pPassword + pAvatar);
+    	outWriter.println(LOGIN + SEPARADOR_COMANDO + pAlias + SEPARADOR_PARAMETROS + pPassword + SEPARADOR_PARAMETROS + pAvatar);
     }
     
+    /**
+     * registra al nuevo jugador en la base de datos
+     * @param pAlias alias del jugador
+     * @param pNombre nombre del jugador
+     * @param pApellido apellido del jugador 
+     * @param pPassword contraseña del jugador
+     * @param pAvatar avatar del jugador
+     */
 	public void registrarCuenta(String pAlias, String pNombre, String pApellido, String pPassword, String pAvatar) {
-		
-		
+		outWriter.println(REGISTRO + SEPARADOR_COMANDO + pAlias + SEPARADOR_PARAMETROS + pNombre + SEPARADOR_PARAMETROS + pApellido
+				+ SEPARADOR_PARAMETROS + pPassword + SEPARADOR_PARAMETROS + pAvatar);
 	}
+	
+	/**
+	 * Mueve la pieza 
+	 * @param pDireccion
+	 */
+	public void moverPieza(String pDireccion) {
+		outWriter.println(MOVER + SEPARADOR_COMANDO + pDireccion);
+	}
+	
+	/**
+	 * Rota la pieza del 
+	 */
+	public void rotarPieza() {
+		outWriter.println(ROTAR);
+	}
+	
+	public void generarPieza(IParte parte) {
+		outWriter.println(GENERAR_PARTE + SEPARADOR_COMANDO + parte);
+	}
+	
+	public void cambiarPieza() {
+		outWriter.println(CAMBIAR_PARTE);
+	}
+	
+	public void iniciarPiezas() {
+		ArrayList<String> nombres = principal.darPartes();
+		String s = "";
+		for (String nombre : nombres) {
+			s = SEPARADOR_COMANDO + nombre;
+		}
+		outWriter.println(INICIAR_PARTES + s);
+	}
+	
+	//******************READ*************************//
+	
+	public void readSocket() throws Exception {
+		while(!principal.darActivo()) {
+			String lectura = inReader.readLine();
+			String[] comandos = lectura.split(SEPARADOR_COMANDO);
+			if (comandos[0].equals(ROTAR)) {
+				principal.rotate();
+			}
+			else if(comandos[0].equals(MOVER)) {
+				if (comandos[1].equals(LEFT)){
+					principal.moverIzquierda();
+				}
+				else if (comandos[2].equals(DOWN)){
+					principal.bajar();
+				}
+				else if (comandos[2].equals(RIGHT)){
+					principal.moverDerecha();
+				}
+			}
+			else if(comandos[0].equals(GENERAR_PARTE)) {
+				principal.nuevaPieza(comandos[1]);
+			}
+			else if(comandos[0].equals(CAMBIAR_PARTE)) {
+				principal.accionarHold();	
+			}
+			else if(comandos[0].equals(INICIAR_PARTES)) {
+				String[] parametros = comandos[1].split(SEPARADOR_PARAMETROS);
+			}
+		}
+	}
+	
+	
+	
 
 
-
+	//*********************Conexion*************************//
 
 	public void establecerConexion(String pDireccionServidor, int pPuertoServidor) throws Exception {
 		try
@@ -201,6 +307,10 @@ public class ControladorComunicaciones {
             throw new Exception( "No fue posible establecer una conexi�n con el servidor. " + e.getMessage( ) );
         }
 		
+	}
+	
+	public void cambiarActivo() {
+		outWriter.println(CAMBIAR_ACTIVO);
 	}
 
 }
