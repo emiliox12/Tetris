@@ -361,6 +361,7 @@ public class Tablero {
 			
 			lineaCompleta();
 		}
+		principal.cambiarActivo();
 	}
 
 	private void probarPerdida() {

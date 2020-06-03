@@ -100,13 +100,14 @@ public class InterfazTetris extends JFrame {
         setLocationRelativeTo( null );
         Image icon = Toolkit.getDefaultToolkit().getImage("data/imagenes/Castillo.png");
         setIconImage(icon);
+
+        controlador = new ControladorComunicaciones(this);
         
         dialogoInicioJugador = new DialogoInicioJugador( this );
         dialogoRegistro = new DialogoRegistrar( this );
         dialogoIniciarSesion = new DialogoIniciarSesion( this );
         dialogoInicioJugador.setVisible( true );
         
-        controlador = new ControladorComunicaciones(this);
         
         // Creación de los paneles.
         panelImagen = new PanelImagen( );
@@ -133,6 +134,17 @@ public class InterfazTetris extends JFrame {
 	
 	public void jugar()
 	{
+		try {
+			controlador.iniciarJuego();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog( this, "Error al leer del servidor:" + e.getMessage( ) );
+		}
+		if(false) {
+			iniciarJuego();
+		}
+	}
+
+	private void iniciarJuego() {
 		if (tablero == null) {
 			tablero = new Tablero(cuadX, cuadY, this);
 			clock.timer.start();
@@ -267,6 +279,8 @@ public class InterfazTetris extends JFrame {
     public void iniciarSesion( String pAlias, String pPassword, String pAvatar)
     {
     	controlador.iniciarSesion(pAlias, pPassword, pAvatar);
+    	this.setVisible(true);
+    	
     }
 
     /**
@@ -275,11 +289,13 @@ public class InterfazTetris extends JFrame {
      * @param pNombre Nombre del jugador. pNombre != null && pNombre != "".
      * @param pApellido Apellidos del jugador. pApellido != null && pApellido != "".
      * @param pPassword Contrase�a del jugador. pPassword != null && pAvatar != "".
-     * @param pAvatar Avatar seleccionado por el jugador. pAvatar != null && pAvatar != "".
+     * @param avatar Avatar seleccionado por el jugador. pAvatar != null && pAvatar != "".
      */
-    public void crearRegistro( String pAlias, String pNombre, String pApellido, String pPassword, String pAvatar )
+    public void crearRegistro( String pAlias, String pNombre, String pApellido, String pPassword, int avatar )
     {
-    	controlador.registrarCuenta(pAlias, pNombre, pApellido, pPassword, pAvatar);
+    	controlador.registrarCuenta(pAlias, pNombre, pApellido, pPassword, avatar);
+    	dialogoRegistro.setVisible(false);
+    	this.setVisible(true);
     }
     
     public void configurarDatosConexion( String pServidor, int pPuerto )
@@ -297,6 +313,10 @@ public class InterfazTetris extends JFrame {
     public void cambiarActivo() {
     	if (activo) {
     		controlador.cambiarActivo();
+    		clock.timer.stop();
+    	}
+    	else{
+    		clock.timer.start();
     	}
     	activo = !activo;
     }
@@ -321,5 +341,21 @@ public class InterfazTetris extends JFrame {
 	public void iniciarPiezas(String[] piezas) {
 		tablero.generarPiezasPorInformacion(piezas);
 	}
+
+	public void activarListaJuagdores(String[] jugadores) {
+		DialogoSeleccionarCompañero d = new DialogoSeleccionarCompañero(this, jugadores);
+		d.setVisible(true);
+		
+	}
+	public void escogerJugador(String jugador) {
+		System.out.println(jugador);
+	}
+	
+	//****************DATOS PRUEBA***************//
  
+	public void datosPruebaDialogo() {
+		String[] p = {"L", "G", "H", "R"};
+		this.activarListaJuagdores(p);
+	}
+	
 }

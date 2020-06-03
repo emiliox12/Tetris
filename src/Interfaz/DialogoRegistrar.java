@@ -1,15 +1,3 @@
-/**
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Universidad de los Andes (Bogot� - Colombia)
- * Departamento de Ingenier�a de Sistemas y Computaci�n 
- * Licenciado bajo el esquema Academic Free License version 2.1 
- *
- * Proyecto Cupi2 (http://cupi2.uniandes.edu.co)
- * Ejercicio: n12_batallaPokemon
- * Autor: Equipo Cupi2 2016
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-
 package Interfaz;
 
 import java.awt.BorderLayout;
@@ -20,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import org.apache.derby.impl.sql.execute.AvgAggregator;
 
 /**
  * Dialogo para crear una cuenta
@@ -40,17 +31,17 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     // -----------------------------------------------------------------
 
     /**
-     * Constante para la serializaci�n.
+     * Constante para la serializaciï¿œn.
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Representa el comando de la opci�n registrar.
+     * Representa el comando de la opciï¿œn registrar.
      */
     private static final String REGISTRAR = "REGISTRAR";
 
     /**
-     * Representa el comando de la opci�n cancelar.
+     * Representa el comando de la opciï¿œn cancelar.
      */
     private static final String CANCELAR = "CANCELAR";
 
@@ -89,12 +80,12 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     private JTextField txtApellidos;
 
     /**
-     * Texto contrase�a.
+     * Texto contraseï¿œa.
      */
     private JPasswordField txtPwd;
 
     /**
-     * Texto confirmaci�n de contrase�a.
+     * Texto confirmaciï¿œn de contraseï¿œa.
      */
     private JPasswordField txtPwdConfirmacion;
 
@@ -118,25 +109,30 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     private JRadioButton rbAvatarFemenino;
 
     /**
-     * Bot�n para registrarse.
+     * Botï¿œn para registrarse.
      */
     private JButton btnRegistrar;
 
     /**
-     * Bot�n cancelar.
+     * Botï¿œn cancelar.
      */
-    private JButton btnCancelar;    
+    private JButton btnCancelar;   
+    String[] avataresDisponibles = { "1", "2", "3", "4"};
+    
+    private JComboBox cmbAvatares;
 
     // -----------------------------------------------------------------
     // Constructores
     // -----------------------------------------------------------------
 
     /**
-     * Construye un nuevo di�logo crear cuenta.
+     * Construye un nuevo diï¿œlogo crear cuenta.
      * @param pPrincipal Referencia a la ventana principal. pPrincipal != null
      */
     public DialogoRegistrar( InterfazTetris pPrincipal )
     {
+    	
+    	
         super( pPrincipal, true );
         setSize( 340, 370 );
         setLocationRelativeTo( null );
@@ -147,9 +143,9 @@ public class DialogoRegistrar extends JDialog implements ActionListener
         JPanel panelOpciones = new JPanel( );
 
         setLayout( new BorderLayout( ) );
-
-        panelDatos.setBorder( BorderFactory.createTitledBorder( "Informaci�n de registro" ) );
-        panelDatos.setLayout( new GridLayout( 10, 2, 5, 5 ) );
+        
+        panelDatos.setBorder( BorderFactory.createTitledBorder( "Información de registro" ) );
+        panelDatos.setLayout( new GridLayout( 9, 3, 5, 5 ) );
 
         JLabel lblServidor = new JLabel( "Servidor:" );
         panelDatos.add( lblServidor );
@@ -181,13 +177,13 @@ public class DialogoRegistrar extends JDialog implements ActionListener
         txtApellidos = new JTextField( );
         panelDatos.add( txtApellidos );
 
-        JLabel lblPwd = new JLabel( "Contrase�a:" );
+        JLabel lblPwd = new JLabel( "Contraseña:" );
         panelDatos.add( lblPwd );
 
         txtPwd = new JPasswordField( );
         panelDatos.add( txtPwd );
 
-        JLabel lblPwdConfirmacion = new JLabel( "Confirmaci�n contrase�a:" );
+        JLabel lblPwdConfirmacion = new JLabel( "Confirmación contraseña:" );
         panelDatos.add( lblPwdConfirmacion );
 
         txtPwdConfirmacion = new JPasswordField( );
@@ -199,14 +195,10 @@ public class DialogoRegistrar extends JDialog implements ActionListener
         JLabel lblPAvatar = new JLabel( "Avatar:" );
         panelDatos.add( lblPAvatar );
         
-        group = new ButtonGroup( );
-        group.add( rbAvatarFemenino );
-        group.add( rbAvatarMasculino );
-
-        panelDatos.add( rbAvatarFemenino );
-
-        panelDatos.add( new JLabel( ) );
-        panelDatos.add( rbAvatarMasculino );
+        cmbAvatares = new JComboBox(avataresDisponibles);
+        
+        panelDatos.add(cmbAvatares);
+        
 
         panelOpciones.setLayout( new GridLayout( 1, 2 ) );
 
@@ -225,7 +217,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
 
     /**
      * Manejo de los eventos de los botones.
-     * @param pEvento Acci�n que gener� el evento. pEvento!= null
+     * @param pEvento Acciï¿œn que generï¿œ el evento. pEvento!= null
      */
     public void actionPerformed( ActionEvent pEvento )
     {
@@ -238,7 +230,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
             String nombre = txtNombres.getText( );
             String apellido = txtApellidos.getText( );
             String servidor = txtServidor.getText( );
-            String avatar = ( rbAvatarFemenino.isSelected( ) ) ? "AvatarFemenino" : "AvatarMasculino";
+            int avatar = cmbAvatares.getSelectedIndex();
             int puerto = Integer.valueOf( txtPuerto.getText( ) );
 
             if( nombre != null && !nombre.isEmpty( ) && apellido != null && !apellido.isEmpty( ) )
@@ -249,7 +241,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
                     {
                         if( !pass1.equals( pass2 ) )
                         {
-                            JOptionPane.showMessageDialog( this, "Las contrase�as no coinciden.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
+                            JOptionPane.showMessageDialog( this, "Las contraseñas no coinciden.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
                         }
                         else
                         {
@@ -259,7 +251,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog( this, "Debe ingresar la contrase�a y su confirmaci�n.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
+                        JOptionPane.showMessageDialog( this, "Debe ingresar la contraseña y su confirmación.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
                     }
                 }
                 else
@@ -271,7 +263,8 @@ public class DialogoRegistrar extends JDialog implements ActionListener
             {
                 JOptionPane.showMessageDialog( this, "Debe ingresar el nombre y apellido.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
             }
-        }
+            
+        } 
         else if( command.equals( CANCELAR ) )
         {
             dispose( );

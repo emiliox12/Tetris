@@ -35,7 +35,7 @@ public class ControladorComunicaciones {
     /**
      * Mensaje para el registro del jugador.
      */
-    public static final String INFO_JUGADOR = "INFO";
+    public static final String INFO_JUGADORES = "INFO";
 
     /**
      * Mensaje para indicar que un jugador tiene el primer turno.
@@ -90,7 +90,7 @@ public class ControladorComunicaciones {
     /**
      * Mensaje para recibir la informaci�n de un jugador.
      */
-    public static final String INFO = "INFO";
+    public static final String INICIO_JUEGO = "INICIO_JUEGO";
 
     /**
      * Mensaje de registro de un jugador.
@@ -212,7 +212,7 @@ public class ControladorComunicaciones {
      * @param pPassword contraseña del jugador
      * @param pAvatar avatar del jugador
      */
-	public void registrarCuenta(String pAlias, String pNombre, String pApellido, String pPassword, String pAvatar) {
+	public void registrarCuenta(String pAlias, String pNombre, String pApellido, String pPassword, int pAvatar) {
 		outWriter.println(REGISTRO + SEPARADOR_COMANDO + pAlias + SEPARADOR_PARAMETROS + pNombre + SEPARADOR_PARAMETROS + pApellido
 				+ SEPARADOR_PARAMETROS + pPassword + SEPARADOR_PARAMETROS + pAvatar);
 	}
@@ -278,6 +278,9 @@ public class ControladorComunicaciones {
 			else if(comandos[0].equals(INICIAR_PARTES)) {
 				String[] parametros = comandos[1].split(SEPARADOR_PARAMETROS);
 			}
+			else if (comandos[0].equals(CAMBIAR_ACTIVO)){
+				principal.cambiarActivo();
+			}
 		}
 	}
 	
@@ -311,6 +314,20 @@ public class ControladorComunicaciones {
 	
 	public void cambiarActivo() {
 		outWriter.println(CAMBIAR_ACTIVO);
+	}
+
+	public void iniciarJuego() throws Exception {
+		outWriter.println(INICIO_JUEGO);
+		String jugadores = inReader.readLine();
+		if (jugadores.split(SEPARADOR_COMANDO)[0].equals(INFO_JUGADORES)) {
+			String[] nombres = jugadores.split(SEPARADOR_COMANDO)[1].split(SEPARADOR_PARAMETROS);
+			principal.activarListaJuagdores(nombres);
+		}
+		
+	}
+	
+	public void escogerJugador(String jugador) {
+		outWriter.println(JUGADOR + SEPARADOR_COMANDO + jugador);
 	}
 
 }

@@ -56,6 +56,9 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 		else if (command == BOTON2) {
 			principal.pintarCuadrilla();
 		}
+		else if (command == BOTON3) {
+			principal.datosPruebaDialogo();
+		}
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
