@@ -120,7 +120,7 @@ public class ControladorComunicaciones {
     /**
      * Indica que se est� esperando a que el oponente realice una jugada.
      */
-    public static final int ESPERANDO_OPONENTE = 2;
+	public static final String ESPERADO_JUGADOR = "ESPERADO_JUGADOR";
 
     /**
      * Indica que se acaba de enviar la jugada del jugador y se est� esperando la respuesta del oponente.
@@ -144,6 +144,7 @@ public class ControladorComunicaciones {
     public final static String S = "S";
     public final static String T = "T";
     public final static String Z = "Z";
+
 	
     /**
      * Puerto usado para conectarse.
@@ -318,10 +319,15 @@ public class ControladorComunicaciones {
 
 	public void iniciarJuego() throws Exception {
 		outWriter.println(INICIO_JUEGO);
-		String jugadores = inReader.readLine();
-		if (jugadores.split(SEPARADOR_COMANDO)[0].equals(INFO_JUGADORES)) {
-			String[] nombres = jugadores.split(SEPARADOR_COMANDO)[1].split(SEPARADOR_PARAMETROS);
-			principal.activarListaJuagdores(nombres);
+		String infoEncuentro = inReader.readLine();
+		if (infoEncuentro.split(SEPARADOR_COMANDO)[0].equals(INFO_JUGADORES)) {
+			String infoAliado = infoEncuentro.split(SEPARADOR_COMANDO)[1];
+			if (infoAliado.equals(ESPERADO_JUGADOR)) {
+				principal.crearDialogoEsperandoJugador();
+			}
+			else if (infoAliado.equals(ESPERADO_JUGADOR)) {
+				
+			}
 		}
 		
 	}

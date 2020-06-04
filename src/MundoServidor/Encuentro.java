@@ -35,7 +35,11 @@ public class Encuentro extends Thread
     // -----------------------------------------------------------------
     // Constantes
     // -----------------------------------------------------------------
-
+	
+	/**
+	 * Prefijo de informacion
+	 */
+	public static final String INFO = "INFO";
     /**
      * Constante que representa el separador de un comando.
      */
@@ -193,6 +197,14 @@ public class Encuentro extends Thread
     // M�todos
     // -----------------------------------------------------------------
 
+    public  PrintWriter darPW1 (){
+    	return out1;
+    }
+    
+    public  PrintWriter darPW2 (){
+    	return out2;
+    }
+    
     /**
      * Retorna el socket usado para comunicarse con el jugador 1.
      * @return Socket del jugador 1.
@@ -253,7 +265,7 @@ public class Encuentro extends Thread
         try
         {
             atacante = iniciarEncuentro( );
-            leerInformacionPokemonSeleccionado( );
+          //  leerInformacionPokemonSeleccionado( );
 
             // Iniciar el juego
 
@@ -324,15 +336,16 @@ public class Encuentro extends Thread
     {
 
         // Enviar a cada jugador la informaci�n sobre su registro y el del oponente (en ese orden)
-        enviarInformacion( out1, jugador1 );
-        enviarInformacion( out1, jugador2 );
+       // enviarInformacion( out1, jugador1 );
+       // enviarInformacion( out1, jugador2 );
 
-        enviarInformacion( out2, jugador2 );
-        enviarInformacion( out2, jugador1 );
+        //enviarInformacion( out2, jugador2 );
+        //enviarInformacion( out2, jugador1 );
 
         // Enviar a cada jugador la informaci�n sobre en qu� orden deben jugar.
-        int turno = ( int ) ( Math.random( ) * 2 + 1 );
-        if( turno == 1 )
+       // int turno = ( int ) ( Math.random( ) * 2 + 1 );
+        int turno = 1;
+        /*if( turno == 1 )
         {
             out1.println( PRIMER_TURNO );
             out2.println( SEGUNDO_TURNO );
@@ -341,7 +354,7 @@ public class Encuentro extends Thread
         {
             out2.println( PRIMER_TURNO );
             out1.println( SEGUNDO_TURNO );
-        }
+        }*/
         return turno;
 
     }
@@ -369,7 +382,7 @@ public class Encuentro extends Thread
      * @throws TetrisException Se lanza esta excepci�n si hay problemas actualizando la base de datos.
      * @throws IOException Se lanza esta excepci�n si hay problemas en la comunicaci�n.
      */
-    private void terminarEncuentro( int pAtacante ) throws BatallaPokemonServidorException, IOException
+    private void terminarEncuentro( int pAtacante ) throws TetrisException, IOException
     {
         // Actualizar el registro de los jugadores
         RegistroJugador ganador = null;
@@ -391,7 +404,7 @@ public class Encuentro extends Thread
         }
         catch( SQLException e )
         {
-            throw new BatallaPokemonServidorException( "Error actualizando la informaci�n en la base de datos: " + e.getMessage( ) + "." );
+            throw new TetrisException( "Error actualizando la informaci�n en la base de datos: " + e.getMessage( ) + "." );
         }
         // Enviar un mensaje indicando el fin del juego y el ganador
         String cadenaGanador = GANADOR + SEPARADOR_COMANDO + ganador.darAlias( );
@@ -415,42 +428,28 @@ public class Encuentro extends Thread
      * @throws IOException Se lanza esta excepci�n si hay problemas en la comunicaci�n.
      * @throws BatallaPokemonServidorException Si uno de los jugadores se desconecta de la batalla.
      */
-    private void procesarJugada( int pAtacante ) throws IOException, Exception, BatallaPokemonServidorException
+    private void procesarJugada( int pAtacante ) throws IOException, Exception, TetrisException
     {
-        PrintWriter atacanteOut = ( pAtacante == 1 ) ? out1 : out2;
-        PrintWriter atacadoOut = ( pAtacante == 1 ) ? out2 : out1;
+        //PrintWriter activoOut = ( pAtacante == 1 ) ? out1 : out2;
+        PrintWriter pasivoOut = ( pAtacante == 1 ) ? out2 : out1;
 
-        BufferedReader atacanteIn = ( pAtacante == 1 ) ? in1 : in2;
-        BufferedReader atacadoIn = ( pAtacante == 1 ) ? in2 : in1;
+        BufferedReader activoIn = ( pAtacante == 1 ) ? in1 : in2;
+       // BufferedReader atacadoIn = ( pAtacante == 1 ) ? in2 : in1;
 
         // Leer la jugada del atacante que indica donde se va a hacer el ataque
-        String lineaJugada = atacanteIn.readLine( );
-        if( lineaJugada != null )
+        String lineaJugada = activoIn.readLine( );
+        if( lineaJugada != null)
         {
-            if( !lineaJugada.startsWith( ATAQUE ) && !lineaJugada.startsWith( CAMBIO_POKEMON ) )
-                throw new Exception( "Se esperaba una JUGADA pero se recibi� " + lineaJugada + "." );
-
-            // Reenviar el ataque al jugador atacado
-            atacadoOut.println( lineaJugada );
-
-            if( lineaJugada.startsWith( ATAQUE ) )
-            {
-                // Leer la informaci�n sobre el resultado del ataque que env�a el jugador atacado
-                String lineaResultado = atacadoIn.readLine( );
-
-                if( !lineaResultado.startsWith( DANIO ) && !lineaResultado.startsWith( FIN_JUEGO ) && !lineaResultado.startsWith( CAMBIO_POKEMON_AUTO ) )
-                    throw new Exception( "Se esperaba el resultado de una JUGADA pero se recibi� " + lineaResultado + "." );
-
-                // Revisar el resultado para saber si el encuentro termina
-                if( lineaResultado.startsWith( FIN_JUEGO ) )
-                {
-                    finJuego = true;
-                }
-
-                // Enviar el resultado del ataque al jugador atacante
-                atacanteOut.println( lineaResultado );
+            if(lineaJugada.startsWith(INFO)){
+            	//La linea comienza por el comando de informaci�n
+            	String  info1 = lineaJugada.split(SEPARADOR_COMANDO)[1];
+            	String info2 = lineaJugada.split(SEPARADOR_COMANDO)[2];
+            	String linea = info1+SEPARADOR_COMANDO+info2;
+            	procesarMetodosServidor(linea);
+            }else{
+            	pasivoOut.println(lineaJugada);
+            	//Informacion que no le incumbe al servidor
             }
-
         }
 
         else
@@ -458,7 +457,7 @@ public class Encuentro extends Thread
     }
     /**
      * Retorna una cadena con la informaci�n del encuentro con el siguiente formato:<br>
-     * <jugador1> VS <jugador2>
+     * <jugador1> y <jugador2>
      * @return Cadena con la informaci�n.
      */
     public String toString( )
@@ -466,8 +465,24 @@ public class Encuentro extends Thread
         RegistroJugador j1 = jugador1;
         RegistroJugador j2 = jugador2;
 
-        String cadena = j1.darAlias( ) + " VS " + j2.darAlias( );
+        String cadena = j1.darAlias( ) + " y " + j2.darAlias( );
         return cadena;
+    }
+    public void procesarMetodosServidor (String comando){
+    	
+    	String [] info = comando.split(SEPARADOR_COMANDO);
+    	//TODO Indicar los comandos que procesa servidor 
+    	//lista improvisada:
+    	// 1) Condicion de partida <<tablero.darEstado() == false>>
+    	// 2) Conexi�n interrumpida <<Algun jugador se desconect� de improvisto>>(P)
+    	// 3) Almacenar nuevo mejor puntaje <<Si se registra un nuevo mejor P conjunto>>
+    	
+    	
+    	switch(info[0]){
+    	
+    	
+    	
+    	}
     }
 
     // -----------------------------------------------------------------

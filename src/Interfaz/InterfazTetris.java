@@ -341,21 +341,12 @@ public class InterfazTetris extends JFrame {
 	public void iniciarPiezas(String[] piezas) {
 		tablero.generarPiezasPorInformacion(piezas);
 	}
-
-	public void activarListaJuagdores(String[] jugadores) {
-		DialogoSeleccionarCompañero d = new DialogoSeleccionarCompañero(this, jugadores);
-		d.setVisible(true);
 		
-	}
-	public void escogerJugador(String jugador) {
-		System.out.println(jugador);
+	public void crearDialogoEsperandoJugador() {
+		JOptionPane.showMessageDialog( this, "Esperando Jugador oponente" );
 	}
 	
 	//****************DATOS PRUEBA***************//
- 
-	public void datosPruebaDialogo() {
-		String[] p = {"L", "G", "H", "R"};
-		this.activarListaJuagdores(p);
-	}
+
 	
 }

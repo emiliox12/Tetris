@@ -19,7 +19,7 @@ public class InterfazServidor extends JFrame
     /**
      * Clase principal del servidor.
      */
-    private BatallaPokemon servidorBatallaPokemon;
+    private MundoServidorTetris servidorBatallaPokemon;
 
     // -----------------------------------------------------------------
     // Atributos de la interfaz
@@ -53,7 +53,7 @@ public class InterfazServidor extends JFrame
      * Construye la ventana principal de la aplicaci�n.
      * @param pServidor Servidor sobre el que funciona la interfaz.
      */
-    public InterfazServidor( BatallaPokemon pServidor )
+    public InterfazServidor( MundoServidorTetris pServidor )
     {
         servidorBatallaPokemon = pServidor;
         inicializarVentana( );
@@ -171,7 +171,7 @@ public class InterfazServidor extends JFrame
             String archivoPropiedades = "./data/servidor.properties";
             
             
-            BatallaPokemon servidorBatallaPokemon = new BatallaPokemon( archivoPropiedades );
+            MundoServidorTetris servidorBatallaPokemon = new MundoServidorTetris( archivoPropiedades );
 
             InterfazServidor interfaz = new InterfazServidor( servidorBatallaPokemon );
             interfaz.setVisible( true );

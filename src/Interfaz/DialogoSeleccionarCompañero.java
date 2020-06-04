@@ -60,10 +60,7 @@ public class DialogoSeleccionarCompañero extends JDialog implements ActionListe
 
         String com = e.getActionCommand();
         for(int i=0;i<tamUsers;i++){
-            if(com.equals(USUARIO+i)){
-                principal.escogerJugador(usuariosDisp[i]);
-                this.setVisible(false);
-            }
+
         }
 
     }

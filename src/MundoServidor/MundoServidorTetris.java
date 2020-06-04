@@ -1,15 +1,3 @@
-/**
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Universidad de los Andes (Bogot� - Colombia)
- * Departamento de Ingenier�a de Sistemas y Computaci�n 
- * Licenciado bajo el esquema Academic Free License version 2.1 
- *
- * Proyecto Cupi2 (http://cupi2.uniandes.edu.co)
- * Ejercicio: n12_batallaPokemon
- * Autor: Equipo Cupi2 2016
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-
 package MundoServidor;
 
 import java.io.*;
@@ -25,12 +13,22 @@ import java.util.*;
  * adminResultados!=null <br>
  * encuentros!=null <br>
  */
-public class BatallaPokemon
+public class MundoServidorTetris
 {
     // -----------------------------------------------------------------
     // Constantes
     // -----------------------------------------------------------------
+	
+	public static final String ESPERANDO_JUGADOR = "ESPERANDO_JUGADOR";
+    /**
+     * Mensaje para el registro del jugador.
+     */
+    public static final String INFO_JUGADORES = "INFO";
 
+	/**
+     * Mensaje para recibir la informacion de un jugador.
+     */
+    public static final String INICIO_JUEGO = "INICIO_JUEGO";
     /**
      * Mensaje de registro de un jugador.
      */
@@ -77,7 +75,7 @@ public class BatallaPokemon
     private Socket socketJugadorEnEspera;
 
     /**
-     * Registro del jugador que est� en espera de un oponente.
+     * Registro del jugadores que estan en espera de un oponente.
      */
     private RegistroJugador registroJugadorEnEspera;
 
@@ -95,7 +93,7 @@ public class BatallaPokemon
      * @param pArchivo Archivo de propiedades que tiene la configuraci�n del servidor. pArchivo != null.
      * @throws BatallaPokemonServidorException Si se encuentra un error en la inicializaci�n de la aplicaci�n.
      */
-    public BatallaPokemon( String pArchivo ) throws BatallaPokemonServidorException
+    public MundoServidorTetris( String pArchivo ) throws BatallaPokemonServidorException
     {
         encuentros = new Vector( );
         try
@@ -169,10 +167,9 @@ public class BatallaPokemon
 
     /**
      * Recibe todas las conexiones entrantes y crea las batallas cuando fuera necesario.
-     * @throws BatallaPokemonServidorException Si hay problemas de comunicaci�n.
-     * @throws TetrisException 
+     * @throws Exception 
      */
-    public void recibirConexiones( ) throws BatallaPokemonServidorException, TetrisException
+    public void recibirConexiones( ) throws Exception
     {
         String aux = config.getProperty( "servidor.puerto" );
         int puerto = Integer.parseInt( aux );
@@ -210,10 +207,10 @@ public class BatallaPokemon
      * Intenta crear e iniciar un nueva batalla con el jugador que se acaba de conectar. <br>
      * Si no se tiene ya un oponente, entonces el jugador queda en espera de que otra persona se conecte.
      * @param pSocketNuevoCliente El canal que permite la comunicaci�n con el nuevo cliente. pSocketNuevoCliente != null.
-     * @throws TetrisException 
+     * @throws Exception 
      * @throws IOException Se lanza esta excepci�n si se presentan problemas de comunicaci�n.
      */
-    synchronized private void crearEncuentro( Socket pSocketNuevoCliente ) throws TetrisException
+    synchronized private void crearEncuentro( Socket pSocketNuevoCliente ) throws Exception
     {
 
         PrintWriter out1;
@@ -237,26 +234,28 @@ public class BatallaPokemon
                     // No hay un oponente a�n, as� que hay que dejarlo en espera.
                     socketJugadorEnEspera = pSocketNuevoCliente;
                     registroJugadorEnEspera = registroActual;
+                    out1.println(INFO_JUGADORES+SEPARADOR_COMANDO+ESPERANDO_JUGADOR);
                 }
                 else
                 {
                     // Ya se tiene un oponente as� que se puede empezar una partida.
-
-                    //Batalla nuevo = new Batalla( socketJugadorEnEspera, pSocketNuevoCliente, in1, out1, baseDeDatos, registroJugadorEnEspera, registroActual );
-                    //iniciarEncuentro( nuevo );
+                    
+                    Encuentro nuevo = new Encuentro( socketJugadorEnEspera, pSocketNuevoCliente, in1, out1, baseDeDatos, registroJugadorEnEspera, registroActual );
+                    iniciarEncuentro( nuevo );
                     socketJugadorEnEspera = null;
 
                 }
             }
-            catch( BatallaPokemonServidorException e )
+            catch( TetrisException e )
             {
-                out1.println( Encuentro.ERROR + SEPARADOR_COMANDO + e.getMessage( ) );
+                out1.println(Encuentro.ERROR + SEPARADOR_COMANDO + e.getMessage( ) );
             }
         }
         catch( IOException e )
         {
             try
             {
+            	//TODO Escoger el jugador de partida y cerrar su canal
                 socketJugadorEnEspera.close( );
                 pSocketNuevoCliente.close( );
             }
@@ -276,7 +275,7 @@ public class BatallaPokemon
      * @throws BatallaPokemonServidorException Si hay problemas consultando a la base de datos o si recibe un mensaje con un formato inesperado.
      * @throws TetrisException 
      */
-    private RegistroJugador consultarJugador( String pInformacion ) throws BatallaPokemonServidorException, TetrisException
+    private RegistroJugador consultarJugador( String pInformacion ) throws TetrisException, Exception
     {
         RegistroJugador registro = null;
         if( pInformacion.startsWith( LOGIN ) )
@@ -293,7 +292,7 @@ public class BatallaPokemon
             }
             catch( SQLException e )
             {
-                throw new BatallaPokemonServidorException( "Login no exitoso: " + e.getMessage( ) + "." );
+                throw new TetrisException( "Login no exitoso: " + e.getMessage( ) + "." );
             }
         }
         else if( pInformacion.startsWith( REGISTRO ) )
@@ -312,12 +311,12 @@ public class BatallaPokemon
             }
             catch( SQLException e )
             {
-                throw new BatallaPokemonServidorException( "Registro no exitoso: " + e.getMessage( ) + "." );
+                throw new TetrisException( "Registro no exitoso: " + e.getMessage( ) + "." );
             }
         }
         else
         {
-            throw new BatallaPokemonServidorException( "El mensaje no tiene el formato esperado." );
+            throw new TetrisException( "El mensaje no tiene el formato esperado." );
         }
         return registro;
     }
@@ -328,6 +327,8 @@ public class BatallaPokemon
     protected void iniciarEncuentro( Encuentro pNuevaBatalla )
     {
         encuentros.add( pNuevaBatalla );
+        pNuevaBatalla.darPW1().println(INFO_JUGADORES+SEPARADOR_COMANDO+INICIO_JUEGO);
+        pNuevaBatalla.darPW2().println(INFO_JUGADORES+SEPARADOR_COMANDO+INICIO_JUEGO);
         pNuevaBatalla.start( );
     }
 
