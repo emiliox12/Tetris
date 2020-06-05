@@ -1,0 +1,9 @@
+8
+Pikachu;Eléctrico;Pikachu.png
+Charmander;Fuego;Charmander.png
+Bulbasaur;Planta;Bulbasaur.png
+Squirtle;Agua; Squirtle.png
+Geodude;Roca;Geodude.png
+Pidgey;Volador;Pidgey.png
+Flareon;Fuego;Flareon.png
+Vaporeon;Agua;Vaporeon.png
