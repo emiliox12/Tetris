@@ -27,7 +27,7 @@ public class ClockPasivo extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		try{
-		principal.popCommand();
+			principal.popCommand();
 		}catch (Exception er){
 			return;
 		}

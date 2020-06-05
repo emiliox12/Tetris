@@ -17,18 +17,22 @@ public class ThreadSocket extends Thread {
 	}
 	
 	public void run() {
+		System.out.println("********************************************");
 		System.out.println("nuevo thread");
 		while(!principal.darActivo()) {
 			String lectura;
 			try {
 				lectura = inReader.readLine();
+				if (lectura == null) {
+					break;
+				}
 				principal.pushCommand(lectura);
 				} catch (IOException e) {
 				System.out.println("Joder, nosmorimos");
 				e.printStackTrace();
 			}
 		}
-		System.out.println("CARAJO ESTO YA SE TERMINA");
+		System.out.println("CARAJO SE CERRÓ EL SOCKET");
 	}
 	
 }

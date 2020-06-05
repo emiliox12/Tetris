@@ -432,11 +432,11 @@ public class Encuentro extends Thread
      */
     private void procesarJugada( int pAtacante ) throws IOException, Exception, TetrisException
     {
-        PrintWriter activoOut = ( pAtacante == 1 ) ? out1 : out2;
+        //PrintWriter activoOut = ( pAtacante == 1 ) ? out1 : out2;
         PrintWriter pasivoOut = ( pAtacante == 1 ) ? out2 : out1;
 
         BufferedReader activoIn = ( pAtacante == 1 ) ? in1 : in2;
-        BufferedReader atacadoIn = ( pAtacante == 1 ) ? in2 : in1;
+        //BufferedReader pasivoIn = ( pAtacante == 1 ) ? in2 : in1;
 
         // Leer la jugada del atacante que indica donde se va a hacer el ataque
         String lineaJugada = activoIn.readLine( );
@@ -445,12 +445,12 @@ public class Encuentro extends Thread
         {
             if(lineaJugada.startsWith(INFO)){
             	//La linea comienza por el comando de informaciï¿½n
-            	System.out.println("wempieza por info");
             	String  info1 = lineaJugada.split(SEPARADOR_COMANDO)[1];;
             	System.out.println(info1);
             	procesarMetodosServidor(info1);
             }else{
             	pasivoOut.println(lineaJugada);
+            	System.out.println(pasivoOut);
             	//Informacion que no le incumbe al servidor
             }
         }
@@ -458,6 +458,26 @@ public class Encuentro extends Thread
         else
             throw new Exception( "Se esperaba una JUGADA pero se recibiï¿½ una cadena nula." );
     }
+ 
+    public void procesarMetodosServidor (String comando){
+    	
+    	String [] info = comando.split(SEPARADOR_COMANDO);
+    	
+    	
+    	switch(info[0]){
+    	
+    	case CAMBIAR_ACTIVO : 
+    		atacante = ( atacante == 1 ) ? 2 : 1;
+    		break;
+    		
+    	case FIN_JUEGO:
+    		puntajeFinal = Integer.parseInt(info[1]);
+    		break;
+    	
+    	
+    	}
+    }
+    
     /**
      * Retorna una cadena con la informaciï¿½n del encuentro con el siguiente formato:<br>
      * <jugador1> y <jugador2>
@@ -470,34 +490,6 @@ public class Encuentro extends Thread
 
         String cadena = j1.darAlias( ) + " y " + j2.darAlias( );
         return cadena;
-    }
-    public void procesarMetodosServidor (String comando){
-    	
-    	System.out.println("comando procesar: " + comando);
-    	String [] info = comando.split(SEPARADOR_COMANDO);
-    	
-    	
-    	
-    	//TODO Indicar los comandos que procesa servidor 
-    	//lista improvisada:
-    	// 1) Condicion de partida (finalizacion) <<tablero.darEstado() == false>>
-    	// 2) Conexiï¿½n interrumpida <<Algun jugador se desconectï¿½ de improvisto>>(P)
-    	// 3) Almacenar nuevo mejor puntaje <<Si se registra un nuevo mejor P conjunto>>
-    	
-    	
-    	switch(info[0]){
-    	
-    	case CAMBIAR_ACTIVO : 
-    		atacante = ( atacante == 1 ) ? 2 : 1;
-    		System.out.println("sí esta cambiando en servidor");
-    		break;
-    		
-    	case FIN_JUEGO:
-    		puntajeFinal = Integer.parseInt(info[1]);
-    		break;
-    	
-    	
-    	}
     }
 
     // -----------------------------------------------------------------

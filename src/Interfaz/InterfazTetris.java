@@ -204,6 +204,7 @@ public class InterfazTetris extends JFrame {
 	 * Listener reloj
 	 */
 	private Clock clock;
+	private ClockPasivo clockPasivo;
 	
 	private DialogoIniciarSesion dialogoIniciarSesion;
 	
@@ -241,6 +242,8 @@ public class InterfazTetris extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage("data/imagenes/Castillo.png");
         setIconImage(icon);
         
+        commandQueue = new ArrayList<String>();
+        
         
         // Creación de los paneles.
         panelImagen = new PanelImagen( );
@@ -257,6 +260,8 @@ public class InterfazTetris extends JFrame {
         invisible.add( listenerTeclado, BorderLayout.NORTH);
         clock = new Clock( this);
         invisible.add( clock, BorderLayout.NORTH);
+        clockPasivo = new ClockPasivo( this);
+        invisible.add( clockPasivo, BorderLayout.NORTH);
         
         lienzo = new Lienzo(cuadX, cuadY, this );
         add( lienzo, BorderLayout.CENTER );
@@ -284,12 +289,9 @@ public class InterfazTetris extends JFrame {
 
 	private void iniciarJuego() {
 		if (tablero == null) {
-			System.out.println("tablero a crear");
 			tablero = new Tablero(cuadX, cuadY, this);
-			System.out.println("tablero creado");
 			//reproducir();
 		}
-		System.out.println("Ya inició el juego");
 		/*if (!activo) {
 			try {
 				//controlador.readSocket();
@@ -485,10 +487,12 @@ public class InterfazTetris extends JFrame {
     		controlador.cambiarActivo();
     		clock.timer.stop();
     		ThreadSocket l = new ThreadSocket(controlador.darBuffer(), this);
-    		l.run();
+    		l.start();
+    		clockPasivo.timer.start();
     	}
     	else{
-    		clock.timer.start();
+    		clockPasivo.timer.stop();
+    		clock.timer.restart();
     	}
     	
     }
@@ -541,14 +545,15 @@ public class InterfazTetris extends JFrame {
 	public void iniciarJuegoActivo() {
 		activo = true;
 		clock.timer.start();
-		System.out.println("Esta llegando al juego activo");
+		System.out.println("Inicia juego Activo");
 		iniciarJuego();
 		System.out.println("Ya inició el juego");
 	}
 
 	public void iniciarJuegoPasivo() {
 		activo = false;
-		System.out.println("Esta llegando al juego pasivo");
+		clockPasivo.timer.start();
+		System.out.println("Inicia juego pasivo");
 		iniciarJuego();
 		
 	}
@@ -567,7 +572,6 @@ public class InterfazTetris extends JFrame {
 
 	public void processCommand(String comando) {
 		if(comando != null) {
-			System.out.println("lectura: " + comando);
 			String[] partesComando = comando.split(SEPARADOR_COMANDO);
 			if (partesComando[0].equals(ROTAR)) {
 				rotate();
@@ -593,6 +597,7 @@ public class InterfazTetris extends JFrame {
 				String[] parametros = partesComando[1].split(SEPARADOR_PARAMETROS);
 			}
 			else if (partesComando[0].equals(CAMBIAR_ACTIVO)){
+				System.out.println("*********Cambio de activo**********");
 				cambiarActivo();
 			}
 
