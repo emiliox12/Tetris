@@ -110,6 +110,7 @@ public class Lienzo extends JPanel {
 			g.setFont(font);
 			g.drawString("Puntaje: ", (getHeight()/3)*3 , (getHeight()/20)*6);
 			g.drawString(principal.darPuntaje() + "", (getHeight()/3)*3 , (getHeight()/20)*6+25);
+			dibujarDisplayTurno(g, 20, getHeight()/2);
 			
 		}
 		
