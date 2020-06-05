@@ -80,7 +80,7 @@ public class InterfazTetris extends JFrame {
 	/**
 	 * Controlador de las comunicaciónes
 	 */
-	private ControladorComunicaciones controlador;
+	public ControladorComunicaciones controlador;
 	
 	private Musica player;
 	
@@ -146,80 +146,84 @@ public class InterfazTetris extends JFrame {
 
 	private void iniciarJuego() {
 		if (tablero == null) {
+			System.out.println("tablero a crear");
 			tablero = new Tablero(cuadX, cuadY, this);
+			System.out.println("tablero creado");
 			//reproducir();
 		}
 		System.out.println("Ya inició el juego");
-		if (!activo) {
+		/*if (!activo) {
 			try {
-				controlador.readSocket();
+				//controlador.readSocket();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog( this, "Error leer socket " + e.getMessage() );
+				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 	
 	public void bajar() {
+		System.out.println(tablero.darEstado());
 		if (tablero.darEstado()) {
-			pintarCuadrilla();
-			tablero.bajar();
-			System.out.println("activo " +activo);
 			if (activo) {
-				System.out.println("intentar Bajar");
 				controlador.moverPieza(ControladorComunicaciones.DOWN);
 			}
+			System.out.println("principal sí baja");
+			tablero.bajar();
+			pintarCuadrilla();
 		}
 	}
 	
 	public void moverDerecha(){
 		if (tablero.darEstado()) {
-			tablero.moverDerecha();
 			if (activo) {
 				controlador.moverPieza(ControladorComunicaciones.RIGHT);
 			}
+			tablero.moverDerecha();
 			pintarCuadrilla();
 		}
 	}
 	
 	public void moverIzquierda() {
 		if (tablero.darEstado() == true) {
-			tablero.moverIzquierda();
-			pintarCuadrilla();
 			if (activo) {
 				controlador.moverPieza(ControladorComunicaciones.LEFT);
 			}
+			tablero.moverIzquierda();
+			pintarCuadrilla();
 		}
 	}
 	public void rotate() {
 		if (tablero.darEstado() == true) {
+			if (activo) {
+				controlador.rotarPieza();
+			}
+			System.out.println("rotar");
 			tablero.rotar();
 			pintarCuadrilla();
-			if (activo) {
-				controlador.moverPieza(ControladorComunicaciones.ROTAR);
-			}
 		}
 	}
 	public void bajarTeclado() {
 		if (tablero.darEstado() == true) {
-			tablero.bajar();
-			clock.darTimer().restart();
-			pintarCuadrilla();
 			if (activo) {
 				controlador.moverPieza(ControladorComunicaciones.DOWN);
 			}
+			tablero.bajar();
+			clock.darTimer().restart();
+			pintarCuadrilla();
 		}
 	}
 	
 	public void pintarCuadrilla(){
 		int [][] cuadrilla = tablero.imprimirTablero();
-		for (int i = 0; i < cuadX; i++) {
+		/*for (int i = 0; i < cuadX; i++) {
 			for (int j = 0; j < cuadY; j++) {
 				System.out.print(cuadrilla[i][j]);
 			}
 			System.out.println();
 		}
+		*/
 		puntaje = tablero.darPuntaje();
-		//lienzo.cargarDatos(cuadrilla, 0);
+		lienzo.cargarDatos(cuadrilla, 0);
 	}
 	
 	public void detener(){
@@ -262,6 +266,10 @@ public class InterfazTetris extends JFrame {
             e.printStackTrace( );
         }
         InterfazTetris interfaz = new InterfazTetris( );
+		if(!interfaz.darActivo()) {
+			ThreadSocket l = new ThreadSocket(interfaz.controlador.darBuffer(), interfaz);
+			l.run();
+		}
     } 
     
     //******************Conectividad*******************//
@@ -334,14 +342,17 @@ public class InterfazTetris extends JFrame {
     }
     
     public void cambiarActivo() {
-    	if (activo) {
+    	activo = !activo;
+    	if (!activo) {
     		controlador.cambiarActivo();
     		clock.timer.stop();
+    		//ThreadSocket l = new ThreadSocket(controlador.darBuffer(), this);
+    		//l.run();
     	}
     	else{
     		clock.timer.start();
     	}
-    	activo = !activo;
+    	
     }
 
 	/*public void accionarHold() {

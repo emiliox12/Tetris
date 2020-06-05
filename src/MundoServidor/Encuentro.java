@@ -446,7 +446,7 @@ public class Encuentro extends Thread
             	String  info1 = lineaJugada.split(SEPARADOR_COMANDO)[1];
             	String info2 = lineaJugada.split(SEPARADOR_COMANDO)[2];
             	String linea = info1+SEPARADOR_COMANDO+info2;
-            	procesarMetodosServidor(linea);
+            	procesarMetodosServidor(linea, pasivoOut);
             }else{
             	pasivoOut.println(lineaJugada);
             	//Informacion que no le incumbe al servidor
@@ -469,7 +469,7 @@ public class Encuentro extends Thread
         String cadena = j1.darAlias( ) + " y " + j2.darAlias( );
         return cadena;
     }
-    public void procesarMetodosServidor (String comando){
+    public void procesarMetodosServidor (String comando, PrintWriter pasivoOut){
     	
     	String [] info = comando.split(SEPARADOR_COMANDO);
     	

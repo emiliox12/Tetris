@@ -266,44 +266,6 @@ public class ControladorComunicaciones {
 		outWriter.println(INFO + SEPARADOR_COMANDO + FIN_JUEGO + SEPARADOR_COMANDO + principal.darPuntaje());
 	}
 	
-	//******************READ*************************//
-	
-	public void readSocket() throws Exception {
-		while(!principal.darActivo()) {
-			String lectura = inReader.readLine();
-			System.out.println(lectura);
-			String[] comandos = lectura.split(SEPARADOR_COMANDO);
-			if (comandos[0].equals(ROTAR)) {
-				principal.rotate();
-			}
-			else if(comandos[0].equals(MOVER)) {
-				if (comandos[1].equals(LEFT)){
-					principal.moverIzquierda();
-				}
-				else if (comandos[2].equals(DOWN)){
-					principal.bajar();
-				}
-				else if (comandos[2].equals(RIGHT)){
-					principal.moverDerecha();
-				}
-			}
-			else if(comandos[0].equals(GENERAR_PARTE)) {
-				principal.nuevaPieza(comandos[1]);
-			}
-			/*else if(comandos[0].equals(CAMBIAR_PARTE)) {
-				principal.accionarHold();	
-			}*/
-			else if(comandos[0].equals(INICIAR_PARTES)) {
-				String[] parametros = comandos[1].split(SEPARADOR_PARAMETROS);
-			}
-			else if (comandos[0].equals(CAMBIAR_ACTIVO)){
-				principal.cambiarActivo();
-			}
-		}
-	}
-	
-	
-	
 
 
 	//*********************Conexion*************************//
@@ -330,8 +292,14 @@ public class ControladorComunicaciones {
 		
 	}
 	
+	public BufferedReader darBuffer() {
+		return inReader;
+	}
+	
 	public void cambiarActivo() {
 		outWriter.println(INFO + SEPARADOR_COMANDOS + CAMBIAR_ACTIVO);
+		System.out.println("Cambiar activo");
+		outWriter.println(CAMBIAR_ACTIVO);
 	}
 
 	public void iniciarJuego() throws Exception {

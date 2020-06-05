@@ -10,8 +10,8 @@ import javax.swing.Timer;
 
 public class Clock extends JPanel implements ActionListener{
 
-	public final static int SPEED = 500;
-	public final static int PAUSE = 1500;
+	public final static int SPEED = 2000;
+	public final static int PAUSE = 2000;
 	
 	InterfazTetris principal;
 	

@@ -51,7 +51,7 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == PLAY){
-			principal.jugar();
+			//principal.jugar();
 		}
 		else if (command == BOTON2) {
 			principal.pintarCuadrilla();

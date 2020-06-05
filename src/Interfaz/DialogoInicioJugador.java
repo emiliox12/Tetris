@@ -87,7 +87,7 @@ public class DialogoInicioJugador extends JDialog implements ActionListener
         super( pInterfazCliente, true );
         setUndecorated( true );
         getRootPane( ).setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );
-        setSize( 380, 180 );
+        setSize( 300, 300 );
         setLocationRelativeTo( null );
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
         setTitle( "�Bienvenido a tetris!" );
