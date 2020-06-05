@@ -17,6 +17,7 @@ public class ListenerTeclado extends JPanel implements KeyListener {
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if(principal.darActivo()) {
 		int key = e.getKeyCode();
 		if (key == KeyEvent.VK_LEFT)
 		{
@@ -37,6 +38,7 @@ public class ListenerTeclado extends JPanel implements KeyListener {
 		else if (key == KeyEvent.VK_SPACE)
 		{
 			principal.pintarCuadrilla();
+		}
 		}
 
 

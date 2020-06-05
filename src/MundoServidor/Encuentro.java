@@ -275,6 +275,7 @@ public class Encuentro extends Thread
             {
                 procesarJugada( atacante );
 
+            	System.out.println(atacante);
                 if( finJuego )
                 {
                     terminarEncuentro( atacante );
@@ -431,22 +432,23 @@ public class Encuentro extends Thread
      */
     private void procesarJugada( int pAtacante ) throws IOException, Exception, TetrisException
     {
-        //PrintWriter activoOut = ( pAtacante == 1 ) ? out1 : out2;
+        PrintWriter activoOut = ( pAtacante == 1 ) ? out1 : out2;
         PrintWriter pasivoOut = ( pAtacante == 1 ) ? out2 : out1;
 
         BufferedReader activoIn = ( pAtacante == 1 ) ? in1 : in2;
-       // BufferedReader atacadoIn = ( pAtacante == 1 ) ? in2 : in1;
+        BufferedReader atacadoIn = ( pAtacante == 1 ) ? in2 : in1;
 
         // Leer la jugada del atacante que indica donde se va a hacer el ataque
         String lineaJugada = activoIn.readLine( );
+        System.out.println(lineaJugada);
         if( lineaJugada != null)
         {
             if(lineaJugada.startsWith(INFO)){
             	//La linea comienza por el comando de informaciï¿½n
-            	String  info1 = lineaJugada.split(SEPARADOR_COMANDO)[1];
-            	String info2 = lineaJugada.split(SEPARADOR_COMANDO)[2];
-            	String linea = info1+SEPARADOR_COMANDO+info2;
-            	procesarMetodosServidor(linea, pasivoOut);
+            	System.out.println("wempieza por info");
+            	String  info1 = lineaJugada.split(SEPARADOR_COMANDO)[1];;
+            	System.out.println(info1);
+            	procesarMetodosServidor(info1);
             }else{
             	pasivoOut.println(lineaJugada);
             	//Informacion que no le incumbe al servidor
@@ -469,8 +471,9 @@ public class Encuentro extends Thread
         String cadena = j1.darAlias( ) + " y " + j2.darAlias( );
         return cadena;
     }
-    public void procesarMetodosServidor (String comando, PrintWriter pasivoOut){
+    public void procesarMetodosServidor (String comando){
     	
+    	System.out.println("comando procesar: " + comando);
     	String [] info = comando.split(SEPARADOR_COMANDO);
     	
     	
@@ -486,6 +489,7 @@ public class Encuentro extends Thread
     	
     	case CAMBIAR_ACTIVO : 
     		atacante = ( atacante == 1 ) ? 2 : 1;
+    		System.out.println("sí esta cambiando en servidor");
     		break;
     		
     	case FIN_JUEGO:

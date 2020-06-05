@@ -150,8 +150,6 @@ public class ControladorComunicaciones {
     public final static String T = "T";
     public final static String Z = "Z";
 
-	private static final String SEPARADOR_COMANDOS = null;
-
 	
     /**
      * Puerto usado para conectarse.
@@ -297,9 +295,9 @@ public class ControladorComunicaciones {
 	}
 	
 	public void cambiarActivo() {
-		outWriter.println(INFO + SEPARADOR_COMANDOS + CAMBIAR_ACTIVO);
-		System.out.println("Cambiar activo");
 		outWriter.println(CAMBIAR_ACTIVO);
+		System.out.println("Cambiar activo");
+		outWriter.println(INFO + SEPARADOR_COMANDO + CAMBIAR_ACTIVO);
 	}
 
 	public void iniciarJuego() throws Exception {

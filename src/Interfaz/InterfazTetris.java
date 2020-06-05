@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,7 +23,140 @@ public class InterfazTetris extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
+	//*************Constantes**********************//
 	
+	/**
+	 * Prefijo de informacion
+	 */
+	public static final String INFO = "INFO";
+	
+	/**
+     * Constante que representa el separador de un comando.
+     */
+    public static final String SEPARADOR_COMANDO = ";;;";
+
+    /**
+     * Constante que representa el separador de los par�metros.
+     */
+    public static final String SEPARADOR_PARAMETROS = ":::";
+
+    /**
+     * Mensaje para el env�o de informaci�n de un jugador.
+     */
+    public static final String JUGADOR = "JUGADOR";
+
+    /**
+     * Mensaje para el registro del jugador.
+     */
+    public static final String INFO_JUGADORES = "INFO";
+
+    /**
+     * Mensaje para indicar que un jugador tiene el primer turno.
+     */
+    public static final String PRIMER_TURNO = "1";
+
+    /**
+     * Mensaje para indicar que un jugador tiene el segundo turno.
+     */
+    public static final String SEGUNDO_TURNO = "2";
+
+    /**
+     * Indica que no se ha establecido la conexi�n con el servidor para jugar.
+     */
+    public static final int SIN_CONECTAR = 0;
+
+    /**
+     * Mensaje para enviar la informaci�n de un movimiento.
+     */
+    public static final String MOVER = "MOVER";
+
+    /**
+     * Mensaje para enviar informacion de rotación
+     */
+    public static final String ROTAR = "ROTAR";
+
+    /**
+     * Mensaje para indicar que el jugador cambi� de pok�mon.
+     */
+    public static final String GENERAR_PARTE = "GENERAR_PARTE";
+
+    /**
+     * Mensaje para indicar que se cambi� autom�ticamente el pok�mon del jugador.
+     */
+    public static final String CAMBIAR_PARTE = "CAMBIAR_PARTE";
+    
+    /**
+     * Mensaje para indicar que el jugador cambi� de pok�mon.
+     */
+    public static final String INICIAR_PARTES= "INICIAR_PARTES";
+
+    /**
+     * Mensaje para indicar la selecci�n de un pok�mon.
+     */
+    public static final String CAMBIAR_ACTIVO = "CAMBIAR_ACTIVO";
+
+    /**
+     * Mensaje de login de un jugador.
+     */
+    public static final String LOGIN = "LOGIN";
+
+    /**
+     * Mensaje para recibir la informaci�n de un jugador.
+     */
+    public static final String INICIO_JUEGO = "INICIO_JUEGO";
+
+    /**
+     * Mensaje de registro de un jugador.
+     */
+    public static final String REGISTRO = "REGISTRO";
+
+    /**
+     * Mensaje para enviar un mensaje de error.
+     */
+    private final static String ERROR = "ERROR";
+
+    /**
+     * Mensaje para indicar quien fue el ganador del juego.
+     */
+    public static final String GANADOR = "GANADOR";
+
+    /**
+     * Mensaje para indicar que un jugador se qued� sin pok�mon.
+     */
+    public static final String FIN_JUEGO = "FIN_JUEGO";
+
+    /**
+     * Indica que se est� esperando que el jugador realice una jugada.
+     */
+    public static final int ESPERANDO_LOCAL = 1;
+
+    /**
+     * Indica que se est� esperando a que el oponente realice una jugada.
+     */
+	public static final String ESPERANDO_JUGADOR = "ESPERANDO_JUGADOR";
+
+    /**
+     * Indica que se acaba de enviar la jugada del jugador y se est� esperando la respuesta del oponente.
+     */
+    public static final int ESPERANDO_RESPUESTA = 3;
+    
+    /**
+     * Direcciones de movimiento
+     */
+    public final static String DOWN = "DOWN";
+    public final static String LEFT = "LEFT";
+    public final static String RIGHT = "RIGHT";
+    
+    /**
+     * Figuras posibles
+     */
+    public final static String CUADRADO = "CUADRADO";
+    public final static String J = "J";
+    public final static String L = "L";
+    public final static String LINEA = "LINEA";
+    public final static String S = "S";
+    public final static String T = "T";
+    public final static String Z = "Z";
 	
 	/**
 	 * Vlores de las casillas;
@@ -87,6 +221,10 @@ public class InterfazTetris extends JFrame {
 	private int puntaje;
 	
 	private boolean activo;
+	
+	private ArrayList<String> commandQueue;
+	
+	static Semaphore commandSemaphore = new Semaphore(1);
 	
 	//=================================================
 	//Métodods
@@ -346,8 +484,8 @@ public class InterfazTetris extends JFrame {
     	if (!activo) {
     		controlador.cambiarActivo();
     		clock.timer.stop();
-    		//ThreadSocket l = new ThreadSocket(controlador.darBuffer(), this);
-    		//l.run();
+    		ThreadSocket l = new ThreadSocket(controlador.darBuffer(), this);
+    		l.run();
     	}
     	else{
     		clock.timer.start();
@@ -421,11 +559,70 @@ public class InterfazTetris extends JFrame {
 	}
 
 	public void probarComunicación() {
-		controlador.probarComunicacion();
+		controlador.cambiarActivo();
 		
 	}
 	
 	//****************DATOS PRUEBA***************//
 
+	public void processCommand(String comando) {
+		if(comando != null) {
+			System.out.println("lectura: " + comando);
+			String[] partesComando = comando.split(SEPARADOR_COMANDO);
+			if (partesComando[0].equals(ROTAR)) {
+				rotate();
+			}
+			else if(partesComando[0].equals(MOVER)) {
+				if (partesComando[1].equals(LEFT)){
+					moverIzquierda();
+				}
+				else if (partesComando[1].equals(DOWN)){
+					bajar();
+				}
+				else if (partesComando[1].equals(RIGHT)){
+					moverDerecha();
+				}
+			}
+			else if(partesComando[0].equals(GENERAR_PARTE)) {
+				nuevaPieza(partesComando[1]);
+			}
+			/*else if(comandos[0].equals(CAMBIAR_PARTE)) {
+			principal.accionarHold();	
+			}*/
+			else if(partesComando[0].equals(INICIAR_PARTES)) {
+				String[] parametros = partesComando[1].split(SEPARADOR_PARAMETROS);
+			}
+			else if (partesComando[0].equals(CAMBIAR_ACTIVO)){
+				cambiarActivo();
+			}
+
+		}
+	}
+	
+	public void popCommand() {
+		try {
+			commandSemaphore.acquire();
+			while(commandQueue.size() > 0) {
+				String command = commandQueue.get(0);
+				commandQueue.remove(0);
+				processCommand(command);
+			}
+			commandSemaphore.release();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void pushCommand(String command) {
+		try {
+			commandSemaphore.acquire();
+			commandQueue.add(command);
+			commandSemaphore.release();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 }
