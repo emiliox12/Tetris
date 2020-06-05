@@ -1,17 +1,9 @@
-/**
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Universidad de los Andes (Bogot� - Colombia)
- * Departamento de Ingenier�a de Sistemas y Computaci�n 
- * Licenciado bajo el esquema Academic Free License version 2.1 
- *
- * Proyecto Cupi2 (http://cupi2.uniandes.edu.co)
- * Ejercicio: n12_batallaPokemon
- * Autor: Equipo Cupi2 2016
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
 package Interfaz;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,7 +79,7 @@ public class DialogoInicioJugador extends JDialog implements ActionListener
     // -----------------------------------------------------------------
 
     /**
-     * Construye un nuevo di�logo de inicio.
+     * Construye un nuevo dialogo de inicio.
      * @param pInterfazCliente Referencia a la ventana principal. pInterfazCliente != null
      */
     public DialogoInicioJugador( InterfazTetris pInterfazCliente )
@@ -98,38 +90,57 @@ public class DialogoInicioJugador extends JDialog implements ActionListener
         setSize( 380, 180 );
         setLocationRelativeTo( null );
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-        setTitle( "Batalla pok�mon" );
+        setTitle( "�Bienvenido a tetris!" );
         principal = pInterfazCliente;
-        JPanel panelOpciones;
+        //JPanel panelOpciones;
+        PanelOpcionesInicioSesion panelOpciones = new PanelOpcionesInicioSesion();
         lblImagenCupi2 = new JLabel( );
-        panelOpciones = new JPanel( );
+        //panelOpciones = new JPanel( );
         btnRegistrar = new JButton( );
         btnIniciarSesion = new JButton( );
         btnSalir = new JButton( );
 
         setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
         setBackground( Color.WHITE );
-        lblImagenCupi2.setIcon( new ImageIcon( "data/imagenes/Inicio.JPG" ) );
-        add( lblImagenCupi2, java.awt.BorderLayout.WEST );
-
-        panelOpciones.setLayout( new GridLayout( 3, 0 ) );
-
+        lblImagenCupi2.setIcon( new ImageIcon( "data/imagenes/Castillo.png" ) );
+        lblImagenCupi2.setOpaque(false);
+        //add( lblImagenCupi2, java.awt.BorderLayout.WEST );
+        panelOpciones.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.5;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+       
         btnRegistrar.setText( "Registrarse" );
         btnRegistrar.addActionListener( this );
         btnRegistrar.setActionCommand( REGISTRAR );
-        panelOpciones.add( btnRegistrar );
-
+        btnRegistrar.setPreferredSize(new Dimension(120,25));
+        btnRegistrar.setBackground(new Color (255,50,25));
+        btnRegistrar.setForeground(Color.WHITE);
+        btnRegistrar.setPreferredSize(new Dimension (120,25));
+        panelOpciones.add(btnRegistrar, gbc);
+        
+        gbc.gridy = 1;
         btnIniciarSesion.setText( "Iniciar sesi�n" );
         btnIniciarSesion.addActionListener( this );
         btnIniciarSesion.setActionCommand( INICIAR_SESION );
-        panelOpciones.add( btnIniciarSesion );
-
+        btnIniciarSesion.setPreferredSize(new Dimension(120,25));
+        btnIniciarSesion.setBackground(new Color (255,50,25));
+        btnIniciarSesion.setForeground(Color.WHITE);
+        panelOpciones.add( btnIniciarSesion,gbc );
+        
+        gbc.gridy = 2;
         btnSalir.setText( "Salir" );
         btnSalir.addActionListener( this );
         btnSalir.setActionCommand( SALIR );
-        panelOpciones.add( btnSalir );
-
+        btnSalir.setPreferredSize(new Dimension (120,25));
+        btnSalir.setBackground(new Color (255,50,25));
+        btnSalir.setForeground(Color.WHITE);
+        
+        panelOpciones.add( btnSalir , gbc );
         add( panelOpciones, java.awt.BorderLayout.CENTER );
+    
     }
 
     // -----------------------------------------------------------------
@@ -138,7 +149,7 @@ public class DialogoInicioJugador extends JDialog implements ActionListener
 
     /**
      * Manejo de los eventos de los botones.
-     * @param pEvento Acci�n que gener� el evento. pEvento != null.
+     * @param pEvento Acci�n que genera el evento. pEvento != null.
      */
     public void actionPerformed( ActionEvent pEvento )
     {

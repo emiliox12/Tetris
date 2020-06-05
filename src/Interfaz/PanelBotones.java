@@ -57,7 +57,7 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 			principal.pintarCuadrilla();
 		}
 		else if (command == BOTON3) {
-			
+			principal.probarComunicación();
 		}
 	}
 	@Override
@@ -96,7 +96,7 @@ public class PanelBotones extends JPanel implements ActionListener, KeyListener{
 				}
 			}
 			else if(key == KeyEvent.VK_M){
-				principal.accionarHold();
+				//principal.accionarHold();
 		}
 		}
 	}

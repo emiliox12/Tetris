@@ -83,11 +83,13 @@ public class Tablero {
 		ancho = xMax;
 		alto = yMax;
 		tableroLogico = new int[ancho][alto];
-		espacioPiezaHold = new int [4][2];
 		limpiarTablero();
-		partes = new ArrayList<IParte>();
-		nuevasPiezas();
-		piezaHold = crearParte(-1,-1);
+		piezaActual = crearParte(5,1);
+		//espacioPiezaHold = new int [4][2];
+		//piezasNext = new int[16][2];
+		//partes = new ArrayList<IParte>();
+		//nuevasPiezas();
+		//piezaHold = crearParte(-1,-1);
 		puntaje = 0;
 		estado = true;
 	}
@@ -119,11 +121,14 @@ public class Tablero {
 			nuevaParte = (IParte) new ZFigura(x, y);
 			break;
 		}
+		principal.mandarParte(nuevaParte.toString());
 		return nuevaParte;
 		
 	}
 	
-	private IParte crearParte(int x, int y, String parte) {
+	public IParte crearParte(String parte) {
+		int x = 5;
+		int y = 1;
 		IParte nuevaParte = null;
 		switch (parte) {
 		case CUADRADO:
@@ -172,20 +177,18 @@ public class Tablero {
 	public int[][] imprimirTablero(){
 		int[][] cuadrilla = new int[ancho][alto];
 		copiarTablero(cuadrilla);
-		try{
 		for (int i = 0; i < 4; i++)
 		{
 			int y = piezaActual.darCentroY() + piezaActual.darY()[i];
 			int x = piezaActual.darCentroX() + piezaActual.darX()[i];
-			cuadrilla[y][x] = piezaActual.darColor();
+			tableroLogico[y][x] = piezaActual.darColor();
 		}
-		for (int i = 0; i < ancho; i++) {
+		/*for (int i = 0; i < ancho; i++) {
 			for (int j = 0; j < alto; j++) {
-				
+				System.out.print(cuadrilla[i][j]);
 			}
-		}}catch(Exception e){
-			estado = false;
-		}
+			System.out.println();
+		}*/
 		return cuadrilla;
 	}
 	
@@ -241,12 +244,15 @@ public class Tablero {
 	}
 	
 	public void bajar() {
+		System.out.println("entra al metodo");
 		Pos[] puntos = piezaActual.darNuevosXY(piezaActual.darCentroX(),piezaActual.darCentroY() + 1);
+		System.out.println("genera los puntos");
 		for (int i = 0; i < 4; i++)
 		{
 			int x = puntos[i].getX();
 			int y = puntos[i].getY();
 			if (y >= 20 || tableroLogico[y][x] != 0) {
+				System.out.println("Entra al if");
 				pegarAlTablero();
 				lineaTurno();
 				//lineaCompleta();
@@ -325,8 +331,9 @@ public class Tablero {
 	}
 	
 	private void lineaTurno (){
-		nuevasPiezas();
 		lineaCompleta();
+		crearParte(5,1);
+		
 	}
 	private void lineaCompleta() {
 		probarPerdida();
@@ -373,6 +380,7 @@ public class Tablero {
 			if (tableroLogico[y][x] != 0) {
 				estado = false;
 				piezaActual =null;
+				principal.finJuego();
 			}
 		}
 	}
@@ -380,7 +388,7 @@ public class Tablero {
 		return estado;
 	}
 	
-	public void reinstanciarPiezaHold (IParte piezaAct){
+	/*public void reinstanciarPiezaHold (IParte piezaAct){
 		switch(piezaAct.darColor()){
 		case 1:
 			piezaHold = new CuadradoFigura(piezaAct.darCentroX(), piezaAct.darCentroY());
@@ -500,7 +508,7 @@ public class Tablero {
 		}
 	}
 	
-public void generarPiezasPorInformacion (String [] piezas){
+	public void generarPiezasPorInformacion (String [] piezas){
 		
 		//Elimina toda pieza que contenga el arreglo
 		for(int i=0;i<partes.size();i++){
@@ -559,7 +567,7 @@ public void generarPiezasPorInformacion (String [] piezas){
 		}
 		return nombres;
 		
-	}
+	}*/
 		
 
 }

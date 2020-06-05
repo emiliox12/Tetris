@@ -1,7 +1,7 @@
 /**
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Universidad de los Andes (Bogotá - Colombia)
- * Departamento de Ingeniería de Sistemas y Computación 
+ * Universidad de los Andes (Bogotï¿½ - Colombia)
+ * Departamento de Ingenierï¿½a de Sistemas y Computaciï¿½n 
  * Licenciado bajo el esquema Academic Free License version 2.1 
  *
  * Proyecto Cupi2 (http://cupi2.uniandes.edu.co)
@@ -15,7 +15,7 @@ package MundoServidor;
 import java.text.*;
 
 /**
- * Esta clase mantiene la información del número de de victorias y derrotas de un jugador<br>
+ * Esta clase mantiene la informaciï¿½n del nï¿½mero de de victorias y derrotas de un jugador<br>
  * <b>inv:</b><br>
  * nombre != null<br>
  * alias != null<br>
@@ -34,12 +34,12 @@ public class RegistroJugador
     private String alias;
 
     /**
-     * Número de batallas ganadas hasta el momento.
+     * Nï¿½mero de batallas ganadas hasta el momento.
      */
     private int mejorPuntaje;
 
     /**
-     * Número de batallas perdidas hasta el momento.
+     * Nï¿½mero de batallas perdidas hasta el momento.
      */
     private int avatar;
     
@@ -66,7 +66,7 @@ public class RegistroJugador
     }
 
     // -----------------------------------------------------------------
-    // Métodos
+    // Mï¿½todos
     // -----------------------------------------------------------------
 
     
@@ -80,7 +80,7 @@ public class RegistroJugador
     }
 
     /**
-     * Retorna el número de batallas ganadas por el jugador.
+     * Retorna el nï¿½mero de batallas ganadas por el jugador.
      * @return Cantidad de batallas ganadas.
      */
     public int darMejorPuntaje( )
@@ -89,7 +89,7 @@ public class RegistroJugador
     }
 
     /**
-     * Retorna el número de batallas perdidas por el jugador.
+     * Retorna el nï¿½mero de batallas perdidas por el jugador.
      * @return Cantidad de batallas perdidas.
      */
     public int darAvatar( )
@@ -100,7 +100,7 @@ public class RegistroJugador
     /**
      * Retorna el porcentaje de efectividad del jugador. <br>
      * Se calcula batallasGanadas * 100 / batallasTotales.
-     * Si el jugador no ha terminado ningún encuentro, la efectividad es 0.
+     * Si el jugador no ha terminado ningï¿½n encuentro, la efectividad es 0.
      * @return Efectividad del jugador.
      */
     public double darEfectividad( )
@@ -116,7 +116,7 @@ public class RegistroJugador
     }
 
     /**
-     * Retorna una cadena con la información del registro.
+     * Retorna una cadena con la informaciï¿½n del registro.
      * @return Retorna una cadena de la forma <nombre>: <ganadas> ganadas / <perdidas> perdidas ( <efectividad>% )
      */
     public String toString( )
@@ -141,7 +141,7 @@ public class RegistroJugador
     private void verificarInvariante( )
     {
         assert ( alias != null ) : "El alias no puede ser null.";
-        assert ( mejorPuntaje >= 0 ) : "El número de batallas ganadas debe ser mayor o igual a 0.";
-        assert ( avatar >= 0 ) : "El número de batallas perdidas debe ser mayor o igual a 0.";
+        assert ( mejorPuntaje >= 0 ) : "El nï¿½mero de batallas ganadas debe ser mayor o igual a 0.";
+        assert ( avatar >= 0 ) : "El nï¿½mero de batallas perdidas debe ser mayor o igual a 0.";
     }
 }

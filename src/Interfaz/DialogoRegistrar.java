@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -30,18 +31,22 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     // Constantes
     // -----------------------------------------------------------------
 
+	/**
+	 * Constante para ruta de imagenes
+	 */
+	private static final String RUTA = "data/imagenes/ImagenesPerfil/";
     /**
-     * Constante para la serializaciï¿œn.
+     * Constante para la serializaciￜn.
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Representa el comando de la opciï¿œn registrar.
+     * Representa el comando de la opciￜn registrar.
      */
     private static final String REGISTRAR = "REGISTRAR";
 
     /**
-     * Representa el comando de la opciï¿œn cancelar.
+     * Representa el comando de la opciￜn cancelar.
      */
     private static final String CANCELAR = "CANCELAR";
 
@@ -80,12 +85,12 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     private JTextField txtApellidos;
 
     /**
-     * Texto contraseï¿œa.
+     * Texto contraseￜa.
      */
     private JPasswordField txtPwd;
 
     /**
-     * Texto confirmaciï¿œn de contraseï¿œa.
+     * Texto confirmaciￜn de contraseￜa.
      */
     private JPasswordField txtPwdConfirmacion;
 
@@ -109,15 +114,21 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     private JRadioButton rbAvatarFemenino;
 
     /**
-     * Botï¿œn para registrarse.
+     * Botￜn para registrarse.
      */
     private JButton btnRegistrar;
 
     /**
-     * Botï¿œn cancelar.
+     * Botￜn cancelar.
      */
     private JButton btnCancelar;   
-    String[] avataresDisponibles = { "1", "2", "3", "4"};
+   ImageIcon[] avataresDisponibles = { new ImageIcon (RUTA+"I.png"),
+		   							   new ImageIcon (RUTA+"J.png"),
+		   							new ImageIcon (RUTA+"L.png"),
+		   							new ImageIcon (RUTA+"O.png"),
+		   							new ImageIcon (RUTA+"S.png"),
+		   							new ImageIcon (RUTA+"T.png"),
+		   							new ImageIcon (RUTA+"Z.png")};
     
     private JComboBox cmbAvatares;
 
@@ -126,7 +137,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
     // -----------------------------------------------------------------
 
     /**
-     * Construye un nuevo diï¿œlogo crear cuenta.
+     * Construye un nuevo diￜlogo crear cuenta.
      * @param pPrincipal Referencia a la ventana principal. pPrincipal != null
      */
     public DialogoRegistrar( InterfazTetris pPrincipal )
@@ -144,7 +155,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
 
         setLayout( new BorderLayout( ) );
         
-        panelDatos.setBorder( BorderFactory.createTitledBorder( "Información de registro" ) );
+        panelDatos.setBorder( BorderFactory.createTitledBorder( "Informaci�n de registro" ) );
         panelDatos.setLayout( new GridLayout( 9, 3, 5, 5 ) );
 
         JLabel lblServidor = new JLabel( "Servidor:" );
@@ -177,13 +188,13 @@ public class DialogoRegistrar extends JDialog implements ActionListener
         txtApellidos = new JTextField( );
         panelDatos.add( txtApellidos );
 
-        JLabel lblPwd = new JLabel( "Contraseña:" );
+        JLabel lblPwd = new JLabel( "Contrase�a:" );
         panelDatos.add( lblPwd );
 
         txtPwd = new JPasswordField( );
         panelDatos.add( txtPwd );
 
-        JLabel lblPwdConfirmacion = new JLabel( "Confirmación contraseña:" );
+        JLabel lblPwdConfirmacion = new JLabel( "Confirmaci�n contrase�a:" );
         panelDatos.add( lblPwdConfirmacion );
 
         txtPwdConfirmacion = new JPasswordField( );
@@ -217,7 +228,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
 
     /**
      * Manejo de los eventos de los botones.
-     * @param pEvento Acciï¿œn que generï¿œ el evento. pEvento!= null
+     * @param pEvento Acciￜn que generￜ el evento. pEvento!= null
      */
     public void actionPerformed( ActionEvent pEvento )
     {
@@ -241,7 +252,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
                     {
                         if( !pass1.equals( pass2 ) )
                         {
-                            JOptionPane.showMessageDialog( this, "Las contraseñas no coinciden.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
+                            JOptionPane.showMessageDialog( this, "Las contrase�as no coinciden.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
                         }
                         else
                         {
@@ -251,7 +262,7 @@ public class DialogoRegistrar extends JDialog implements ActionListener
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog( this, "Debe ingresar la contraseña y su confirmación.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
+                        JOptionPane.showMessageDialog( this, "Debe ingresar la contrase�a y su confirmaci�n.", "Crear cuenta", JOptionPane.ERROR_MESSAGE );
                     }
                 }
                 else

@@ -18,6 +18,11 @@ public class ControladorComunicaciones {
 	//*************Constantes**********************//
 	
 	/**
+	 * Prefijo de informacion
+	 */
+	public static final String INFO = "INFO";
+	
+	/**
      * Constante que representa el separador de un comando.
      */
     public static final String SEPARADOR_COMANDO = ";;;";
@@ -120,7 +125,7 @@ public class ControladorComunicaciones {
     /**
      * Indica que se est� esperando a que el oponente realice una jugada.
      */
-	public static final String ESPERADO_JUGADOR = "ESPERADO_JUGADOR";
+	public static final String ESPERANDO_JUGADOR = "ESPERANDO_JUGADOR";
 
     /**
      * Indica que se acaba de enviar la jugada del jugador y se est� esperando la respuesta del oponente.
@@ -144,6 +149,8 @@ public class ControladorComunicaciones {
     public final static String S = "S";
     public final static String T = "T";
     public final static String Z = "Z";
+
+	private static final String SEPARADOR_COMANDOS = null;
 
 	
     /**
@@ -199,10 +206,12 @@ public class ControladorComunicaciones {
 	 * @param pAlias alias del jugador 
 	 * @param pPassword contraseña del jugador
 	 * @param pAvatar avatar del jugador
+	 * @throws Exception 
 	 */
-    public void iniciarSesion(String pAlias, String pPassword, String pAvatar )
+    public void iniciarSesion(String pAlias, String pPassword, String pAvatar ) throws Exception
     {
     	outWriter.println(LOGIN + SEPARADOR_COMANDO + pAlias + SEPARADOR_PARAMETROS + pPassword + SEPARADOR_PARAMETROS + pAvatar);
+    	principal.jugar();
     }
     
     /**
@@ -212,10 +221,12 @@ public class ControladorComunicaciones {
      * @param pApellido apellido del jugador 
      * @param pPassword contraseña del jugador
      * @param pAvatar avatar del jugador
+     * @throws Exception 
      */
-	public void registrarCuenta(String pAlias, String pNombre, String pApellido, String pPassword, int pAvatar) {
+	public void registrarCuenta(String pAlias, String pNombre, String pApellido, String pPassword, int pAvatar) throws Exception {
 		outWriter.println(REGISTRO + SEPARADOR_COMANDO + pAlias + SEPARADOR_PARAMETROS + pNombre + SEPARADOR_PARAMETROS + pApellido
 				+ SEPARADOR_PARAMETROS + pPassword + SEPARADOR_PARAMETROS + pAvatar);
+		principal.jugar();;
 	}
 	
 	/**
@@ -223,6 +234,7 @@ public class ControladorComunicaciones {
 	 * @param pDireccion
 	 */
 	public void moverPieza(String pDireccion) {
+		System.out.println("está mandando un comando");
 		outWriter.println(MOVER + SEPARADOR_COMANDO + pDireccion);
 	}
 	
@@ -233,7 +245,7 @@ public class ControladorComunicaciones {
 		outWriter.println(ROTAR);
 	}
 	
-	public void generarPieza(IParte parte) {
+	public void generarPieza(String parte) {
 		outWriter.println(GENERAR_PARTE + SEPARADOR_COMANDO + parte);
 	}
 	
@@ -241,13 +253,17 @@ public class ControladorComunicaciones {
 		outWriter.println(CAMBIAR_PARTE);
 	}
 	
-	public void iniciarPiezas() {
+	/*public void iniciarPiezas() {
 		ArrayList<String> nombres = principal.darPartes();
 		String s = "";
 		for (String nombre : nombres) {
 			s = SEPARADOR_COMANDO + nombre;
 		}
 		outWriter.println(INICIAR_PARTES + s);
+	}*/
+	
+	public void finJuego() {
+		outWriter.println(INFO + SEPARADOR_COMANDO + FIN_JUEGO + SEPARADOR_COMANDO + principal.darPuntaje());
 	}
 	
 	//******************READ*************************//
@@ -255,6 +271,7 @@ public class ControladorComunicaciones {
 	public void readSocket() throws Exception {
 		while(!principal.darActivo()) {
 			String lectura = inReader.readLine();
+			System.out.println(lectura);
 			String[] comandos = lectura.split(SEPARADOR_COMANDO);
 			if (comandos[0].equals(ROTAR)) {
 				principal.rotate();
@@ -273,9 +290,9 @@ public class ControladorComunicaciones {
 			else if(comandos[0].equals(GENERAR_PARTE)) {
 				principal.nuevaPieza(comandos[1]);
 			}
-			else if(comandos[0].equals(CAMBIAR_PARTE)) {
+			/*else if(comandos[0].equals(CAMBIAR_PARTE)) {
 				principal.accionarHold();	
-			}
+			}*/
 			else if(comandos[0].equals(INICIAR_PARTES)) {
 				String[] parametros = comandos[1].split(SEPARADOR_PARAMETROS);
 			}
@@ -314,19 +331,18 @@ public class ControladorComunicaciones {
 	}
 	
 	public void cambiarActivo() {
-		outWriter.println(CAMBIAR_ACTIVO);
+		outWriter.println(INFO + SEPARADOR_COMANDOS + CAMBIAR_ACTIVO);
 	}
 
 	public void iniciarJuego() throws Exception {
-		outWriter.println(INICIO_JUEGO);
 		String infoEncuentro = inReader.readLine();
-		if (infoEncuentro.split(SEPARADOR_COMANDO)[0].equals(INFO_JUGADORES)) {
+		if (infoEncuentro.split(SEPARADOR_COMANDO)[0].equals(INFO)) {
 			String infoAliado = infoEncuentro.split(SEPARADOR_COMANDO)[1];
-			if (infoAliado.equals(ESPERADO_JUGADOR)) {
-				principal.crearDialogoEsperandoJugador();
+			if (infoAliado.equals(ESPERANDO_JUGADOR)) {
+				principal.esperarJuego(inReader);
 			}
-			else if (infoAliado.equals(ESPERADO_JUGADOR)) {
-				
+			else if (infoAliado.equals(INICIO_JUEGO)) {
+				principal.iniciarJuegoPasivo();
 			}
 		}
 		
@@ -334,6 +350,11 @@ public class ControladorComunicaciones {
 	
 	public void escogerJugador(String jugador) {
 		outWriter.println(JUGADOR + SEPARADOR_COMANDO + jugador);
+	}
+
+	public void probarComunicacion() {
+		outWriter.println("prueba comunicación");
+		
 	}
 
 }

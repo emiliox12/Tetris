@@ -172,7 +172,7 @@ public class BaseDeDatos{
      * @throws BatallaPokemonServidorException Si ya existe un jugador con el alias dado.
      * @throws TetrisException 
      */
-    public RegistroJugador crearRegistroJugador( String pAlias, String pNombre, String pApellidos, String pContrasenia,int avatar ) throws SQLException, BatallaPokemonServidorException, TetrisException
+    public RegistroJugador crearRegistroJugador( String pAlias, String pNombre, String pApellidos, String pContrasenia,int avatar ) throws SQLException, TetrisException
     {
         RegistroJugador registro = null;
 

@@ -1,10 +1,6 @@
 ----------------------------------------------------------------
-2020-06-03 14:57:36.638 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.1.1.0 - (208786): instance c013800d-0172-7ab0-0866-ffffd2cd04f0
+2020-06-05 00:52:42.629 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.1.1.0 - (208786): instance c013800d-0172-81f7-3901-ffffd2cd04f0
 on database directory /home/emilio/code/tetris/Tetris/data/batallaPokemon 
 
 Database Class Loader started - derby.database.classpath=''
-
-2020-06-03 15:01:25.885 GMT:
-Shutting down instance c013800d-0172-7ab0-0866-ffffd2cd04f0
-----------------------------------------------------------------

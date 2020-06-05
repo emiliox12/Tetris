@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -100,13 +102,6 @@ public class InterfazTetris extends JFrame {
         setLocationRelativeTo( null );
         Image icon = Toolkit.getDefaultToolkit().getImage("data/imagenes/Castillo.png");
         setIconImage(icon);
-
-        controlador = new ControladorComunicaciones(this);
-        
-        dialogoInicioJugador = new DialogoInicioJugador( this );
-        dialogoRegistro = new DialogoRegistrar( this );
-        dialogoIniciarSesion = new DialogoIniciarSesion( this );
-        dialogoInicioJugador.setVisible( true );
         
         
         // Creación de los paneles.
@@ -129,6 +124,13 @@ public class InterfazTetris extends JFrame {
         add( lienzo, BorderLayout.CENTER );
         
         player = new Musica(this);
+        
+        controlador = new ControladorComunicaciones(this);
+        
+        dialogoInicioJugador = new DialogoInicioJugador( this );
+        dialogoRegistro = new DialogoRegistrar( this );
+        dialogoIniciarSesion = new DialogoIniciarSesion( this );
+        dialogoInicioJugador.setVisible( true );
 
 	}
 	
@@ -137,38 +139,45 @@ public class InterfazTetris extends JFrame {
 		try {
 			controlador.iniciarJuego();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog( this, "Error al leer del servidor:" + e.getMessage( ) );
-		}
-		if(false) {
-			iniciarJuego();
+			e.printStackTrace();
 		}
 	}
+
 
 	private void iniciarJuego() {
 		if (tablero == null) {
 			tablero = new Tablero(cuadX, cuadY, this);
-			clock.timer.start();
-			reproducir();
+			//reproducir();
+		}
+		System.out.println("Ya inició el juego");
+		if (!activo) {
+			try {
+				controlador.readSocket();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog( this, "Error leer socket " + e.getMessage() );
+			}
 		}
 	}
 	
 	public void bajar() {
-		if (tablero.darEstado() == true) {
-		tablero.bajar();
+		if (tablero.darEstado()) {
 			pintarCuadrilla();
+			tablero.bajar();
+			System.out.println("activo " +activo);
 			if (activo) {
+				System.out.println("intentar Bajar");
 				controlador.moverPieza(ControladorComunicaciones.DOWN);
 			}
 		}
 	}
 	
 	public void moverDerecha(){
-		if (tablero.darEstado() == true) {
+		if (tablero.darEstado()) {
 			tablero.moverDerecha();
-			pintarCuadrilla();
 			if (activo) {
 				controlador.moverPieza(ControladorComunicaciones.RIGHT);
 			}
+			pintarCuadrilla();
 		}
 	}
 	
@@ -202,9 +211,15 @@ public class InterfazTetris extends JFrame {
 	}
 	
 	public void pintarCuadrilla(){
-		int [][] cuadrlla = tablero.imprimirTablero();
+		int [][] cuadrilla = tablero.imprimirTablero();
+		for (int i = 0; i < cuadX; i++) {
+			for (int j = 0; j < cuadY; j++) {
+				System.out.print(cuadrilla[i][j]);
+			}
+			System.out.println();
+		}
 		puntaje = tablero.darPuntaje();
-		lienzo.cargarDatos(cuadrlla, 0);
+		//lienzo.cargarDatos(cuadrilla, 0);
 	}
 	
 	public void detener(){
@@ -278,8 +293,12 @@ public class InterfazTetris extends JFrame {
     
     public void iniciarSesion( String pAlias, String pPassword, String pAvatar)
     {
-    	controlador.iniciarSesion(pAlias, pPassword, pAvatar);
-    	this.setVisible(true);
+    	try {
+    		this.setVisible(true);
+			controlador.iniciarSesion(pAlias, pPassword, pAvatar);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog( this, "Error al ejecutar la aplicación:" + e.getMessage( ) );
+		}
     	
     }
 
@@ -293,9 +312,13 @@ public class InterfazTetris extends JFrame {
      */
     public void crearRegistro( String pAlias, String pNombre, String pApellido, String pPassword, int avatar )
     {
-    	controlador.registrarCuenta(pAlias, pNombre, pApellido, pPassword, avatar);
+    	try {
+    		this.setVisible(true);
+			controlador.registrarCuenta(pAlias, pNombre, pApellido, pPassword, avatar);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog( this, "Error al ejecutar la aplicación:" + e.getMessage( ) );
+		}
     	dialogoRegistro.setVisible(false);
-    	this.setVisible(true);
     }
     
     public void configurarDatosConexion( String pServidor, int pPuerto )
@@ -321,11 +344,12 @@ public class InterfazTetris extends JFrame {
     	activo = !activo;
     }
 
-	public void accionarHold() {
+	/*public void accionarHold() {
 		tablero.activarHold();
 	}
 
 	public ArrayList<String> darPartes() {
+		System.out.println(tablero.darPartes());
 		return tablero.darPartes();
 		
 	}
@@ -334,16 +358,60 @@ public class InterfazTetris extends JFrame {
 		controlador.iniciarPiezas();
 	}
 	
-	public void nuevaPieza(String pieza) {
-		tablero.nuevasPiezas(pieza);
-	}
 	
 	public void iniciarPiezas(String[] piezas) {
 		tablero.generarPiezasPorInformacion(piezas);
-	}
+	}*/
 		
+    public void nuevaPieza(String pieza) {
+    	tablero.crearParte(pieza);
+    }
+    
+    public void mandarParte(String pieza) {
+    	controlador.generarPieza(pieza);
+    }
+    
 	public void crearDialogoEsperandoJugador() {
 		JOptionPane.showMessageDialog( this, "Esperando Jugador oponente" );
+	}
+
+	public void esperarJuego(BufferedReader inReader) {
+		try {
+			String[] info = inReader.readLine().split(ControladorComunicaciones.SEPARADOR_COMANDO);
+			if(info[1].equals(ControladorComunicaciones.INICIO_JUEGO)){
+				iniciarJuegoActivo();
+			}
+		} 
+
+		catch (IOException e) {
+			JOptionPane.showMessageDialog( this, "Error al esperar al socket " + e.getMessage() );
+		}
+		
+	}
+
+	public void iniciarJuegoActivo() {
+		activo = true;
+		clock.timer.start();
+		System.out.println("Esta llegando al juego activo");
+		iniciarJuego();
+		System.out.println("Ya inició el juego");
+	}
+
+	public void iniciarJuegoPasivo() {
+		activo = false;
+		System.out.println("Esta llegando al juego pasivo");
+		iniciarJuego();
+		
+	}
+
+	public void finJuego() {
+		controlador.finJuego();
+		
+	}
+
+	public void probarComunicación() {
+		controlador.probarComunicacion();
+		
 	}
 	
 	//****************DATOS PRUEBA***************//

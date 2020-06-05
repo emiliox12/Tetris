@@ -18,6 +18,10 @@ public class MundoServidorTetris
     // -----------------------------------------------------------------
     // Constantes
     // -----------------------------------------------------------------
+	/**
+	 * Prefijo de informacion
+	 */
+	public static final String INFO = "INFO";
 	
 	public static final String ESPERANDO_JUGADOR = "ESPERANDO_JUGADOR";
     /**
@@ -93,7 +97,7 @@ public class MundoServidorTetris
      * @param pArchivo Archivo de propiedades que tiene la configuraci�n del servidor. pArchivo != null.
      * @throws BatallaPokemonServidorException Si se encuentra un error en la inicializaci�n de la aplicaci�n.
      */
-    public MundoServidorTetris( String pArchivo ) throws BatallaPokemonServidorException
+    public MundoServidorTetris( String pArchivo ) throws TetrisException
     {
         encuentros = new Vector( );
         try
@@ -107,11 +111,11 @@ public class MundoServidorTetris
         }
         catch( SQLException e )
         {
-            throw new BatallaPokemonServidorException( "Hubo problemas con el archivo de propiedades o en la conexi�n de la base de datos: " + e.getMessage( ) );
+            throw new TetrisException( "Hubo problemas con el archivo de propiedades o en la conexi�n de la base de datos: " + e.getMessage( ) );
         }
         catch( Exception e )
         {
-            throw new BatallaPokemonServidorException( "Hubo problemas conectado a la base de datos: " + e.getMessage( ) );
+            throw new TetrisException( "Hubo problemas conectado a la base de datos: " + e.getMessage( ) );
         }
     }
     // -----------------------------------------------------------------
@@ -188,7 +192,7 @@ public class MundoServidorTetris
         }
         catch( IOException e )
         {
-            throw new BatallaPokemonServidorException( "Hubo problemas de comunicaci�n: " + e.getMessage( ) );
+            throw new TetrisException( "Hubo problemas de comunicaci�n: " + e.getMessage( ) );
         }
         finally
         {
@@ -234,7 +238,8 @@ public class MundoServidorTetris
                     // No hay un oponente a�n, as� que hay que dejarlo en espera.
                     socketJugadorEnEspera = pSocketNuevoCliente;
                     registroJugadorEnEspera = registroActual;
-                    out1.println(INFO_JUGADORES+SEPARADOR_COMANDO+ESPERANDO_JUGADOR);
+                    out1.println(INFO + SEPARADOR_COMANDO + ESPERANDO_JUGADOR);
+                   
                 }
                 else
                 {
@@ -327,8 +332,8 @@ public class MundoServidorTetris
     protected void iniciarEncuentro( Encuentro pNuevaBatalla )
     {
         encuentros.add( pNuevaBatalla );
-        pNuevaBatalla.darPW1().println(INFO_JUGADORES+SEPARADOR_COMANDO+INICIO_JUEGO);
-        pNuevaBatalla.darPW2().println(INFO_JUGADORES+SEPARADOR_COMANDO+INICIO_JUEGO);
+        pNuevaBatalla.darPW1().println(INFO + SEPARADOR_COMANDO + INICIO_JUEGO);
+        pNuevaBatalla.darPW2().println(INFO + SEPARADOR_COMANDO + INICIO_JUEGO);
         pNuevaBatalla.start( );
     }
 
