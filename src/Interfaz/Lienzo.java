@@ -48,6 +48,8 @@ public class Lienzo extends JPanel {
 	private int[][] tableroDeJuego = new int[InterfazTetris.cuadX][InterfazTetris.cuadY];
 	private int puntaje=0;
 	
+	private int contraste = 70;
+	
 	
 	/**
 	 * Boton listener
@@ -163,40 +165,89 @@ public class Lienzo extends JPanel {
 			switch (pColor){
 			case 0:
 				g.setColor(VOID);
-			break;
-			
+				break;
+
 			case 1:
 				g.setColor(RED);
-			break;
-			
+				break;
+
 			case 2:
 				g.setColor(GREEN);
-			break;
-			
+				break;
+
 			case 3:
 				g.setColor(BLUE);
-			break;
-			
+				break;
+
 			case 4:
 				g.setColor(YELLOW);
-			break;
-			
+				break;
+
 			case 5:
 				g.setColor(PURPLE);
-			break;
-			
+				break;
+
 			case 6:
 				g.setColor(PINK);
-			break;
-			
+				break;
+
 			case 7:
 				g.setColor(ORANGE);
-			break;
+				break;
 			}
-			g.fill(bloque);
+			if(g.getColor() == VOID){
+				g.fill(bloque);	
+			}else{
+				g.fill(bloque);
+				int r = g.getColor().getRed();
+				int gr = g.getColor().getGreen();
+				int b = g.getColor().getBlue();
+
+				Color bordeClaro = new Color(ajusteColorPositivo(r),ajusteColorPositivo(gr),ajusteColorPositivo(b));
+
+				Color bordeOscuro = new Color(ajusteColorNegativo(r),ajusteColorNegativo(gr),ajusteColorNegativo(b));
+				g.setColor(bordeClaro);
+				g.drawRect(posX, posY, l, 1);
+				g.drawRect(posX, posY+1, l, 1);
+				g.drawRect(posX+1, posY, 1, l);
+
+				g.setColor(bordeOscuro);
+				g.drawRect(posX, posY+l-1, l, 1);
+				g.drawRect(posX, posY+l-2, l, 1);
+				g.drawRect(posX+l-2, posY, 1, l);
+				g.drawRect(posX+l-1, posY, 1, l);
+			}
+
 			g.setColor(Color.GRAY);
 			g.draw(bloque);
-		
+		}
+		/**
+		 * Método que ajusta las bandas de color negativas
+		 * @param color - Color a ajustar
+		 * @return valor de ajuste
+		 */
+		public int ajusteColorNegativo (int color){
+			int ans =0;
+			if(color-contraste < 0){
+				ans = 0;
+			}else{
+				ans = color-contraste;
+			}
+			return ans;
+		}
+		/**
+		 * Método que ajusta las bandas de color positivas
+		 * @param color - Color a ajustar
+		 * @return valor de ajuste
+		 */
+		public int ajusteColorPositivo (int color){
+			int ans =0;
+			if(color+contraste > 255){
+				ans = 255;
+			}else{
+				ans = color+contraste;
+			}
+			return ans;
 		}
 
 }
